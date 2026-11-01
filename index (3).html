@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>starfalltxt – Minecraft Texturepacks</title>
+<meta name="description" content="starfalltxt: Minecraft-Texturepacks zum kostenlosen Download.">
+<meta name="theme-color" content="#06030d">
+<style>
+:root{--bg:#06030d;--violet:#8b5cf6;--orchid:#c084fc;--ink:#f4ecff;--mute:#a597c4;--star:#ffe8a3;--line:#2f1f58;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(120% 70% at 50% -10%,#261049 0%,var(--bg) 62%) fixed;color:var(--ink);font:16px/1.55 "Trebuchet MS",system-ui,sans-serif}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+main,header,footer{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.1;margin:0}
+a{color:var(--orchid)}
+:focus-visible{outline:2px solid var(--orchid);outline-offset:2px}
+.mute{color:var(--mute);font-size:.9rem}
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-weight:800;letter-spacing:.04em;font-size:1.15rem}
+.badge{font-size:.75rem;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,.25);border:1px solid var(--violet);color:var(--orchid);font-weight:700}
+.hero{padding:8vh 0 6vh;max-width:720px}
+.hero h1{font-size:clamp(2.8rem,12vw,5.5rem);font-weight:800;letter-spacing:-.03em;background:linear-gradient(180deg,#fff 10%,var(--orchid) 70%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 28px rgba(139,92,246,.55))}
+.hero p{font-size:1.1rem;color:#d9c9f5;max-width:46ch;margin:16px 0 24px}
+.btn{display:inline-block;border:0;border-radius:10px;padding:11px 20px;font:inherit;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--violet),#6d28d9);cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.12)}
+.btn:disabled{opacity:.55;cursor:not-allowed;filter:none}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+h2{font-size:1.6rem;margin:0 0 6px}
+section{padding:28px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:18px}
+.card{background:rgba(22,11,46,.75);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card:hover{border-color:var(--orchid)}
+.open{display:block;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.ph{display:grid;place-items:center;width:100%;aspect-ratio:16/9;font-size:2.6rem;font-weight:800;background:linear-gradient(135deg,#2a1457,#0d0620);color:var(--orchid)}
+.card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.meta{padding:14px 16px 16px;display:grid;gap:8px}
+.tag{justify-self:start;font-size:.8rem;padding:2px 10px;border:1px solid var(--line);border-radius:99px;color:var(--mute)}
+.empty{color:var(--mute);padding:8px 0}
+dialog{padding:0;overflow:hidden;width:min(640px,94vw);border:1px solid var(--line);border-radius:16px;background:#0f0826;color:var(--ink)}
+dialog::backdrop{background:rgba(3,1,8,.82)}
+.dlg{position:relative;padding:22px;max-height:calc(100dvh - 3rem);overflow:auto}
+.dlg img{width:100%;border-radius:10px;margin-bottom:14px}
+.dlg form{display:grid;gap:10px;margin:16px 0}
+.close{position:absolute;top:10px;right:12px;border:0;background:none;color:var(--mute);font-size:1.8rem;line-height:1;cursor:pointer}
+input,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0a0519;color:var(--ink);font:inherit}
+input[type=file]{padding:8px}
+label{display:grid;gap:4px;font-size:.9rem;color:var(--mute)}
+.msg{margin:0;min-height:1.2em;color:var(--orchid);font-size:.9rem}
+.msg.err{color:#fca5a5}
+.x{border:0;background:none;color:#f0abfc;cursor:pointer;font:inherit;font-size:.85rem;margin-top:10px}
+body.admin .guest,body:not(.admin) .adm{display:none}
+footer{padding:28px 0 40px;color:var(--mute);font-size:.9rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+footer button{border:0;background:none;color:var(--mute);font:inherit;cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<header class="top">
+  <span class="logo">starfalltxt</span>
+  <span id="adminBadge" class="badge" hidden>Admin</span>
+</header>
+<main>
+  <div class="hero">
+    <h1>starfalltxt</h1>
+    <p>Minecraft-Texturepacks zum kostenlosen Download.</p>
+    <a class="btn" href="#packs">Packs ansehen</a>
+  </div>
+  <section id="packs">
+    <h2>Texturepacks</h2>
+    <p class="mute">Tippe auf ein Pack für Beschreibung und Download.</p>
+    <div class="grid" id="grid"><p class="empty">Lade Packs …</p></div>
+  </section>
+</main>
+<footer>
+  <span>starfalltxt</span>
+  <button type="button" id="adminBtn">Admin</button>
+</footer>
+<dialog id="packDlg"><div class="dlg"><button type="button" class="close" aria-label="Schließen">×</button><div id="packBody"></div></div></dialog>
+<dialog id="adminDlg"><div class="dlg">
+  <button type="button" class="close" aria-label="Schließen">×</button>
+  <form id="loginForm" class="guest">
+    <h2>Admin-Login</h2>
+    <p class="mute">Passwort eingeben (Standard: <strong>starfall</strong>)</p>
+    <input id="pw" type="password" placeholder="Passwort" autocomplete="current-password" required>
+    <button class="btn" type="submit">Einloggen</button>
+    <p class="msg" id="loginMsg" role="status"></p>
+  </form>
+  <form id="uploadForm" class="adm">
+    <h2>Neues Texturepack</h2>
+    <p class="mute">Packs werden in diesem Browser gespeichert und sind hier sofort sichtbar.</p>
+    <input name="name" placeholder="Name des Packs" maxlength="60" required>
+    <input name="mc" placeholder="Minecraft-Version, z. B. 1.21" maxlength="20">
+    <textarea name="desc" rows="3" maxlength="600" placeholder="Beschreibung"></textarea>
+    <label>ZIP-Datei (max. 15 MB) <input name="zip" type="file" accept=".zip,application/zip" required></label>
+    <label>Vorschaubild optional <input name="image" type="file" accept="image/png,image/jpeg,image/webp"></label>
+    <button class="btn" type="submit" id="upBtn">Hochladen</button>
+    <button type="button" class="btn ghost" id="logout">Abmelden</button>
+    <p class="msg" id="upMsg" role="status"></p>
+  </form>
+</div></dialog>
+<script>
+const $ = s => document.querySelector(s);
+const h = (tag, attrs = {}, ...kids) => {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids) if (c != null && c !== false) el.append(c);
+  return el;
+};
+const ADMIN_PASSWORD = 'starfall';
+const STORE_KEY = 'starfalltxt_packs_v1';
+let isAdmin = sessionStorage.getItem('sf_admin') === '1';
+let packs = [];
+function setAdminUI() {
+  document.body.classList.toggle('admin', isAdmin);
+  const b = $('#adminBadge');
+  if (b) b.hidden = !isAdmin;
+}
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return [];
+    const list = JSON.parse(raw);
+    return Array.isArray(list) ? list : [];
+  } catch { return []; }
+}
+function saveLocal(list) { localStorage.setItem(STORE_KEY, JSON.stringify(list)); }
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => reject(new Error('Datei konnte nicht gelesen werden.'));
+    r.readAsDataURL(file);
+  });
+}
+async function load() {
+  let list = loadLocal();
+  if (!list.length) {
+    try {
+      const r = await fetch('packs.json?t=' + Date.now());
+      if (r.ok) {
+        const data = await r.json();
+        if (Array.isArray(data)) list = data;
+      }
+    } catch (_) {}
+  }
+  packs = list;
+  const grid = $('#grid');
+  if (!packs.length) {
+    grid.replaceChildren(h('p', { class: 'empty' }, 'Noch keine Texturepacks. Als Admin kannst du welche hochladen.'));
+    return;
+  }
+  grid.replaceChildren(...packs.map(card));
+}
+const card = p => h('article', { class: 'card' },
+  h('button', { class: 'open', type: 'button', onclick: () => openPack(p.id) },
+    p.image ? h('img', { src: p.image, alt: 'Vorschau von ' + p.name, loading: 'lazy' })
+      : h('div', { class: 'ph' }, (p.name || '?')[0].toUpperCase()),
+    h('div', { class: 'meta' },
+      h('h3', {}, p.name || 'Ohne Namen'),
+      p.mc ? h('span', { class: 'tag' }, 'Minecraft ' + p.mc) : null
+    )
+  )
+);
+function openPack(id) {
+  const p = packs.find(x => x.id === id);
+  if (!p) return;
+  const sizeMb = p.size ? (p.size / 1048576).toFixed(1).replace('.', ',') + ' MB' : '';
+  const dateStr = p.date ? new Date(p.date).toLocaleDateString('de-DE') : '';
+  const kids = [];
+  if (p.image) kids.push(h('img', { src: p.image, alt: 'Vorschau von ' + p.name }));
+  kids.push(h('h2', {}, p.name || 'Pack'));
+  kids.push(h('p', { class: 'mute' }, [p.mc && ('Minecraft ' + p.mc), sizeMb, dateStr].filter(Boolean).join(' · ') || ' '));
+  if (p.desc) kids.push(h('p', {}, p.desc));
+  if (p.zip) kids.push(h('a', { class: 'btn', href: p.zip, download: (p.name || 'pack') + '.zip' }, 'Herunterladen'));
+  else kids.push(h('p', { class: 'mute' }, 'Kein Download hinterlegt.'));
+  if (isAdmin) {
+    kids.push(h('button', { class: 'x', type: 'button', onclick: () => {
+      if (!confirm('Pack „' + p.name + '“ löschen?')) return;
+      packs = packs.filter(x => x.id !== id);
+      saveLocal(packs);
+      $('#packDlg').close();
+      load();
+    }}, 'Pack löschen'));
+  }
+  $('#packBody').replaceChildren(...kids);
+  if (!$('#packDlg').open) $('#packDlg').showModal();
+}
+$('#adminBtn').onclick = () => { $('#loginMsg').textContent = ''; $('#upMsg').textContent = ''; $('#adminDlg').showModal(); };
+$('#logout').onclick = () => { isAdmin = false; sessionStorage.removeItem('sf_admin'); setAdminUI(); $('#adminDlg').close(); };
+$('#loginForm').onsubmit = e => {
+  e.preventDefault();
+  const msg = $('#loginMsg');
+  msg.classList.remove('err');
+  const pw = ($('#pw').value || '').trim();
+  if (pw !== ADMIN_PASSWORD) { msg.classList.add('err'); msg.textContent = 'Falsches Passwort.'; return; }
+  isAdmin = true; sessionStorage.setItem('sf_admin', '1'); $('#pw').value = ''; msg.textContent = ''; setAdminUI();
+};
+$('#uploadForm').onsubmit = async e => {
+  e.preventDefault();
+  if (!isAdmin) return;
+  const form = e.target; const msg = $('#upMsg'); const btn = $('#upBtn');
+  msg.classList.remove('err'); msg.textContent = 'Speichere …'; btn.disabled = true;
+  try {
+    const fd = new FormData(form);
+    const name = String(fd.get('name') || '').trim();
+    const mc = String(fd.get('mc') || '').trim();
+    const desc = String(fd.get('desc') || '').trim();
+    const zip = fd.get('zip'); const img = fd.get('image');
+    if (!name) throw new Error('Name fehlt.');
+    if (!zip || !zip.size) throw new Error('ZIP fehlt.');
+    if (zip.size > 15 * 1048576) throw new Error('ZIP max. 15 MB (Browser-Speicher).');
+    const zipData = await fileToDataUrl(zip);
+    let image = '';
+    if (img && img.size) {
+      if (img.size > 3 * 1048576) throw new Error('Bild max. 3 MB.');
+      image = await fileToDataUrl(img);
+    }
+    const pack = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, mc, desc, size: zip.size, date: Date.now(), zip: zipData, image };
+    packs = [pack, ...loadLocal()]; saveLocal(packs); form.reset(); msg.textContent = 'Fertig – Pack ist sichtbar.'; await load();
+  } catch (err) { msg.classList.add('err'); msg.textContent = err.message || 'Fehler beim Hochladen.'; }
+  finally { btn.disabled = false; }
+};
+document.addEventListener('click', e => {
+  if (e.target.matches('.close')) e.target.closest('dialog')?.close();
+  else if (e.target === $('#packDlg') || e.target === $('#adminDlg')) e.target.close();
+});
+setAdminUI(); load();
+(() => {
+  const c = $('#sky'), x = c.getContext('2d'), R = Math.random;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 0, H = 0, S = [], F = [];
+  const size = () => {
+    W = c.width = innerWidth; H = c.height = innerHeight;
+    S = Array.from({ length: Math.min(160, (W * H) / 9000 | 0) }, () => ({ x: R() * W, y: R() * H, r: R() * 1.3 + .3, p: R() * 6.28, s: R() * .02 + .005 }));
+  };
+  const draw = () => {
+    x.clearRect(0, 0, W, H);
+    for (const s of S) {
+      x.globalAlpha = calm ? .7 : .3 + .7 * Math.abs(Math.sin(s.p += s.s));
+      x.fillStyle = s.r > 1.2 ? '#ffe8a3' : '#e9d5ff';
+      x.beginPath(); x.arc(s.x, s.y, s.r, 0, 6.28); x.fill();
+    }
+    if (!calm) {
+      if (R() < .012 && F.length < 3) F.push({ x: R() * W * 1.2, y: -20, v: 3 + R() * 3 });
+      for (let i = F.length; i--;) {
+        const f = F[i]; f.x -= f.v * .45; f.y += f.v;
+        const tx = f.x + f.v * .45 * 14, ty = f.y - f.v * 14;
+        const g = x.createLinearGradient(f.x, f.y, tx, ty);
+        g.addColorStop(0, 'rgba(255,240,200,.9)'); g.addColorStop(1, 'rgba(192,132,252,0)');
+        x.globalAlpha = 1; x.strokeStyle = g; x.lineWidth = 1.6;
+        x.beginPath(); x.moveTo(f.x, f.y); x.lineTo(tx, ty); x.stroke();
+        if (f.y > H + 80 || f.x < -80) F.splice(i, 1);
+      }
+      requestAnimationFrame(draw);
+    }
+  };
+  size(); draw();
+  addEventListener('resize', () => { if (innerWidth !== W) { size(); if (calm) draw(); } });
+})();
+</script>
+</body>
+</html>
