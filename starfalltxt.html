@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>starfalltxt</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;500;700&display=swap">
+<style id="css">
+:root{--bg:#05010d;--panel:rgba(26,10,50,.55);--line:rgba(168,85,247,.28);--v:#a855f7;--l:#c4a1ff;--tx:#ece6ff;--mu:#9d8fc4;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(900px 600px at 15% -10%,rgba(124,58,237,.35),transparent 60%),radial-gradient(800px 600px at 100% 30%,rgba(168,85,247,.2),transparent 60%),var(--bg);background-attachment:fixed;color:var(--tx);font-family:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif}
+#sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+#root{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 20px 40px}
+header{text-align:center;padding:64px 0 36px}
+.eyebrow{letter-spacing:.3em;font-size:12px;color:var(--l);text-transform:uppercase;margin:0 0 10px}
+h1{font-size:clamp(44px,12vw,92px);margin:0;font-weight:700;letter-spacing:-.02em;background:linear-gradient(180deg,#fff,var(--l) 55%,var(--v));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(168,85,247,.55))}
+.sub{color:var(--mu);font-weight:300;margin:12px 0 24px}
+.btn{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:0;border-radius:999px;padding:12px 22px;font:500 14px 'Sora',sans-serif;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:0 0 24px rgba(168,85,247,.4);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 34px rgba(168,85,247,.65)}
+.btn.sm{padding:8px 16px;font-size:13px}
+.btn.ghost{background:transparent;border:1px solid var(--line);box-shadow:none;color:var(--l)}
+.btn:disabled{opacity:.5;cursor:default}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;backdrop-filter:blur(8px);transition:transform .2s,border-color .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);border-color:var(--v);box-shadow:0 10px 40px rgba(124,58,237,.3)}
+.th{aspect-ratio:16/9;background:linear-gradient(135deg,#1b0836,#3b0f6e) center/cover;display:grid;place-items:center;font-size:40px;color:var(--l)}
+.bd{padding:16px}
+.bd h3{margin:0 0 4px;font-size:18px}
+.meta{color:var(--l);font-size:12px;margin:0 0 8px}
+.bd p{color:var(--mu);font-size:14px;line-height:1.5;margin:0 0 14px;font-weight:300}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.empty{text-align:center;color:var(--mu);padding:40px 0}
+footer{text-align:center;color:var(--mu);font-size:12px;margin-top:48px;opacity:.7}
+.ov{position:fixed;inset:0;background:rgba(3,0,10,.8);display:none;place-items:center;z-index:5;padding:20px}
+.ov.on{display:grid}
+.md{background:#0d0420;border:1px solid var(--line);border-radius:20px;padding:22px;width:100%;max-width:440px;max-height:90vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.md h2{margin:0 0 4px}
+.md input,.md textarea{background:#16082e;border:1px solid var(--line);border-radius:10px;color:var(--tx);padding:10px;font:14px 'Sora',sans-serif;width:100%}
+.md label{font-size:12px;color:var(--mu);display:flex;flex-direction:column;gap:4px}
+#msg{color:var(--l);font-size:13px;margin:0;min-height:18px}
+</style></head>
+<body><canvas id="sky"></canvas><div id="root"></div>
+<script id="app">
+/*S*/const STATE={"packs":[]};/*E*/
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const HEAD='<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>starfalltxt</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;500;700&display=swap">';
+let canEdit=false,artifact=null,assets=null;
+
+function buildDoc(state){
+  const css=document.getElementById('css').textContent;
+  const app=document.getElementById('app').textContent.replace(/\/\*S\*\/[\s\S]*?\/\*E\*\//,()=>'/*S*/const STATE='+JSON.stringify(state).replace(/</g,'\\u003c')+';/*E*/');
+  return '<!doctype html>\n<html lang="de"><head>'+HEAD+'<style id="css">'+css+'</style></head><body><canvas id="sky"></canvas><div id="root"></div><scr'+'ipt id="app">'+app+'</scr'+'ipt></body></html>';
+}
+
+function card(p){
+  const href=p.file||p.link;
+  return `<article class="card"><div class="th"${p.thumb?` style="background-image:url('${esc(p.thumb)}')"`:''}>${p.thumb?'':'✦'}</div><div class="bd"><h3>${esc(p.name)}</h3><p class="meta">${esc(p.mc||'Minecraft')} · ${esc(p.date)}</p><p>${esc(p.desc)}</p><div class="row">${href?`<a class="btn sm" target="_blank" rel="noopener noreferrer" href="${esc(href)}">Download</a>`:''}${canEdit?`<button class="btn ghost sm" data-del="${esc(p.id)}">Löschen</button>`:''}</div></div></article>`;
+}
+
+function render(){
+  const P=STATE.packs;
+  $('#root').innerHTML=`<header><p class="eyebrow">✦ Minecraft Texturpacks ✦</p><h1>starfalltxt</h1><p class="sub">Texturpacks, gemacht unter einem Sternenhimmel.</p>${canEdit?'<button class="btn" id="add">+ Texturpack hochladen</button>':''}</header>
+  <main>${P.length?'<div class="grid">'+P.map(card).join('')+'</div>':'<p class="empty">Noch keine Texturpacks – bald fallen hier die ersten Sterne vom Himmel ✦</p>'}</main>
+  <footer>starfalltxt · nicht mit Mojang oder Microsoft verbunden</footer>
+  ${canEdit?`<div class="ov" id="ov"><div class="md"><h2>Neues Texturpack</h2>
+  <input id="f-name" placeholder="Name"><input id="f-mc" placeholder="Minecraft-Version, z. B. 1.21"><textarea id="f-desc" rows="3" placeholder="Beschreibung"></textarea>
+  <label>Vorschaubild<input type="file" id="f-th" accept="image/*"></label>
+  <label>Pack-Datei (.zip)<input type="file" id="f-zip"></label>
+  <input id="f-link" placeholder="oder Download-Link (https://…)">
+  <p id="msg"></p><div class="row"><button class="btn" id="save">Veröffentlichen</button><button class="btn ghost" id="cancel">Abbrechen</button></div></div></div>`:''}`;
+}
+
+async function save(){
+  const m=$('#msg'),btn=$('#save'),name=$('#f-name').value.trim();
+  if(!name){m.textContent='Bitte einen Namen eingeben.';return}
+  btn.disabled=true;m.textContent='Lade hoch …';
+  const p={id:Date.now().toString(36),name,mc:$('#f-mc').value.trim(),desc:$('#f-desc').value.trim(),date:new Date().toISOString().slice(0,10)};
+  try{
+    const th=$('#f-th').files[0],zp=$('#f-zip').files[0],lk=$('#f-link').value.trim();
+    if(th)p.thumb=(await assets.upload(th)).url;
+    if(zp)p.file=(await assets.upload(zp)).url;else if(/^https:\/\//.test(lk))p.link=lk;
+    await artifact.publish(buildDoc({packs:[p,...STATE.packs]}));
+  }catch(e){
+    btn.disabled=false;
+    m.textContent=e&&e.code==='unsupported_type'?'ZIP wird hier nicht angenommen – nutze stattdessen einen Download-Link.':'Hat nicht geklappt ('+((e&&e.code)||'Fehler')+').';
+  }
+}
+
+document.addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.id==='add')$('#ov').classList.add('on');
+  else if(t.id==='cancel')$('#ov').classList.remove('on');
+  else if(t.id==='save')save();
+  else if(t.dataset&&t.dataset.del){
+    if(!t.dataset.armed){t.dataset.armed='1';t.textContent='Wirklich löschen?';return}
+    try{await artifact.publish(buildDoc({packs:STATE.packs.filter(x=>x.id!==t.dataset.del)}))}catch(err){t.textContent='Fehler'}
+  }
+});
+
+(async()=>{
+  try{
+    const u=await claude.use('user');
+    artifact=await claude.use('artifact');
+    assets=await claude.use('assets');
+    canEdit=!!(artifact&&u&&(u.isOwner()||u.canEdit()));
+  }catch(e){}
+  render();
+})();
+render();
+
+/* Sternenhimmel */
+const cv=$('#sky'),cx=cv.getContext('2d'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W,H,S=[],shoot=null;
+function size(){
+  const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+  S=Array.from({length:Math.round(W*H/7000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,p:Math.random()*6.3,s:Math.random()*1.5+.5,c:Math.random()<.3?'196,161,255':'255,255,255'}));
+}
+function frame(t){
+  cx.clearRect(0,0,W,H);
+  for(const s of S){cx.fillStyle=`rgba(${s.c},${.35+.65*Math.abs(Math.sin(t/1000*s.s+s.p))})`;cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fill()}
+  if(!reduce){
+    if(!shoot&&Math.random()<.004)shoot={x:Math.random()*W*.7,y:Math.random()*H*.4,l:0};
+    if(shoot){shoot.l+=14;const x=shoot.x+shoot.l,y=shoot.y+shoot.l*.5,g=cx.createLinearGradient(x,y,x-80,y-40);g.addColorStop(0,'rgba(255,255,255,.9)');g.addColorStop(1,'rgba(168,85,247,0)');cx.strokeStyle=g;cx.lineWidth=1.5;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x-80,y-40);cx.stroke();if(shoot.l>600)shoot=null}
+    requestAnimationFrame(frame);
+  }
+}
+size();requestAnimationFrame(frame);
+addEventListener('resize',()=>{size();if(reduce)frame(0)});
+</script></body></html>
