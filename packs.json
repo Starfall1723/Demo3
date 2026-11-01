@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "mvy0z01kmtv0",
+    "name": "Barebones",
+    "mc": "1.21.11",
+    "desc": "just the normal barebones txt",
+    "size": 3676576,
+    "date": 1793549350530,
+    "zip": "packs/mvy0z01kmtv0.zip",
+    "image": "packs/mvy0z01kmtv0.webp"
+  }
+]
