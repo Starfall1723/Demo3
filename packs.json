@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzcgu66urb2",
+    "name": "Custom Mace and Netherite Sword Animations",
+    "mc": "1.21.11",
+    "desc": "Custom Netherite Sword and Mace Animations",
+    "size": 375914,
+    "date": 1793629123856,
+    "zip": "packs/mvzcgu66urb2.zip",
+    "image": "packs/mvzcgu66urb2.png"
+  },
+  {
     "id": "mvzcf28n9hqn",
     "name": "Mod Menu Helper",
     "mc": "1.21.11",
