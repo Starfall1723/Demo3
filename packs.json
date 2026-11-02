@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzbszkt8n7r",
+    "name": "Monster cans",
+    "mc": "1.21.11",
+    "desc": "Potions are Monster cans",
+    "size": 31534,
+    "date": 1793628010857,
+    "zip": "packs/mvzbszkt8n7r.zip",
+    "image": "packs/mvzbszkt8n7r.webp"
+  },
+  {
     "id": "mvzbsb62nte0",
     "name": "Moon knight pvp",
     "mc": "1.21.11",
