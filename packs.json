@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzd0do6itn8",
+    "name": "FlameFrags_Sweep",
+    "mc": "1.21.11",
+    "desc": "Sweep hits look like fire",
+    "size": 1544457,
+    "date": 1793630036011,
+    "zip": "packs/mvzd0do6itn8.zip",
+    "image": "packs/mvzd0do6itn8.webp"
+  },
+  {
     "id": "mvzcsmotww3c",
     "name": "PvP for Cuties",
     "mc": "1.21.11",
