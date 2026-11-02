@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzowsqdv5z5",
+    "name": "PvP Optimizer",
+    "mc": "1.21.11",
+    "desc": "Optimizing your pvp",
+    "size": 170527,
+    "date": 1793650023393,
+    "zip": "packs/mvzowsqdv5z5.zip",
+    "image": "packs/mvzowsqdv5z5.webp"
+  },
+  {
     "id": "mvzd42xbg724",
     "name": "ItzRealMe PVP Edit",
     "mc": "1.21.11",
