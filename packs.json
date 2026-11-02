@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzbnl43x827",
+    "name": "Red netherite sword",
+    "mc": "1.21.11",
+    "desc": "the netherite sword has a glimmer of red",
+    "size": 3867,
+    "date": 1793627757967,
+    "zip": "packs/mvzbnl43x827.zip",
+    "image": "packs/mvzbnl43x827.webp"
+  },
+  {
     "id": "mvzbmhawh66u",
     "name": "visible shield cooldown",
     "mc": "1.21.11",
