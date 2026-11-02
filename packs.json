@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzbzp5yvelc",
+    "name": "Blades Of Majestica",
+    "mc": "1.21.11",
+    "desc": "The names for the sword are on this website https://realm-of-majestica.webflow.io",
+    "size": 2097738,
+    "date": 1793628325391,
+    "zip": "packs/mvzbzp5yvelc.zip",
+    "image": "packs/mvzbzp5yvelc.webp"
+  },
+  {
     "id": "mvzbwuhs7d07",
     "name": "Connected Glass",
     "mc": "1.21.11",
