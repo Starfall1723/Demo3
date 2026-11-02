@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzcsmotww3c",
+    "name": "PvP for Cuties",
+    "mc": "1.21.11",
+    "desc": "PvP For cuties",
+    "size": 661733,
+    "date": 1793629674192,
+    "zip": "packs/mvzcsmotww3c.zip",
+    "image": "packs/mvzcsmotww3c.webp"
+  },
+  {
     "id": "mvzcgu66urb2",
     "name": "Custom Mace and Netherite Sword Animations",
     "mc": "1.21.11",
