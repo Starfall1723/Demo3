@@ -1,5 +1,15 @@
 [
   {
+    "id": "mvzd1m2qmrom",
+    "name": "Spunky Pack Classic",
+    "mc": "1.21.11",
+    "desc": "PVP pack",
+    "size": 1748120,
+    "date": 1793630093213,
+    "zip": "packs/mvzd1m2qmrom.zip",
+    "image": "packs/mvzd1m2qmrom.webp"
+  },
+  {
     "id": "mvzd0do6itn8",
     "name": "FlameFrags_Sweep",
     "mc": "1.21.11",
