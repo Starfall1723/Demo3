@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>starfalltxt – Minecraft Texturepacks</title>
+<meta name="description" content="starfalltxt: Minecraft-Texturepacks zum kostenlosen Download.">
+<meta name="theme-color" content="#06030d">
+<style>
+:root{--bg:#06030d;--violet:#8b5cf6;--orchid:#c084fc;--ink:#f4ecff;--mute:#a597c4;--star:#ffe8a3;--line:#2f1f58;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(120% 70% at 50% -10%,#261049 0%,var(--bg) 62%) fixed;color:var(--ink);font:16px/1.55 "Trebuchet MS",system-ui,sans-serif}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+main,header{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.1;margin:0}
+a{color:var(--orchid)}
+:focus-visible{outline:2px solid var(--orchid);outline-offset:2px}
+.mute{color:var(--mute);font-size:.9rem}
+.top{display:flex;justify-content:center;align-items:center;padding:0}
+.badge{font-size:.75rem;padding:3px 10px;border-radius:99px;background:rgba(139,92,246,.25);border:1px solid var(--violet);color:var(--orchid);font-weight:700}
+.hero{padding:8vh 0 6vh;max-width:720px}
+.hero h1{font-size:clamp(2.8rem,12vw,5.5rem);font-weight:800;letter-spacing:-.03em;background:linear-gradient(180deg,#fff 10%,var(--orchid) 70%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 28px rgba(139,92,246,.55))}
+.hero p{font-size:1.1rem;color:#d9c9f5;max-width:46ch;margin:16px 0 24px}
+.btn{display:inline-block;border:0;border-radius:10px;padding:11px 20px;font:inherit;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--violet),#6d28d9);cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.12)}
+.btn:disabled{opacity:.55;cursor:not-allowed;filter:none}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+h2{font-size:1.6rem;margin:0 0 6px}
+section{padding:28px 0 56px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:18px}
+.card{background:rgba(22,11,46,.75);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card:hover{border-color:var(--orchid)}
+.open{display:block;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.ph{display:grid;place-items:center;width:100%;aspect-ratio:16/9;font-size:2.6rem;font-weight:800;background:linear-gradient(135deg,#2a1457,#0d0620);color:var(--orchid)}
+.card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.meta{padding:14px 16px 16px;display:grid;gap:6px}
+.tag{justify-self:start;font-size:.8rem;padding:2px 10px;border:1px solid var(--line);border-radius:99px;color:var(--mute)}
+.empty{color:var(--mute);padding:8px 0}
+.pagerwrap{margin:32px 0 8px;text-align:center}
+.pagerwrap[hidden]{display:none}
+.pagelabel{margin:0 0 12px;font-size:1.1rem;font-weight:800;color:var(--orchid)}
+.search{margin:16px 0 0;max-width:520px}
+.search input{-webkit-appearance:none;appearance:none;padding:12px 18px;border-radius:99px;background:rgba(22,11,46,.75);font-size:1rem}
+.search input::placeholder{color:var(--mute)}
+.laser{position:fixed;top:0;left:36px;width:22px;height:440px;margin-left:-11px;border-radius:12px;pointer-events:none;z-index:50;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 30%,#5b21b6 68%,#e9d5ff 100%);box-shadow:0 0 34px 10px rgba(168,85,247,.65);transform:translateY(-460px);animation:laserfall 1.6s ease-in forwards}
+@keyframes laserfall{to{transform:translateY(calc(100vh + 20px))}}
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;align-items:start;margin-top:18px}
+.listcol{min-width:0}
+.cats{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(22,11,46,.75)}
+.catlabel{margin:0 0 10px;font-weight:800;color:var(--orchid)}
+.catlist{display:flex;flex-direction:column;gap:4px}
+.cat{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;padding:9px 12px;border:1px solid transparent;border-radius:10px;background:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.cat:hover{background:rgba(139,92,246,.18)}
+.cat small{color:var(--mute);font-size:.8rem}
+.cat.zero{opacity:.45}
+.cat[aria-pressed="true"]{background:var(--violet);color:#fff;font-weight:700;opacity:1}
+.cat[aria-pressed="true"] small{color:#fff}
+.langsep{margin:16px 0 10px;border:0;border-top:1px solid var(--line)}
+.langlist,#vers{display:flex;flex-direction:column;gap:3px;max-height:220px;overflow-y:auto}
+.lang{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;border:1px solid transparent;border-radius:8px;background:none;color:var(--ink);font:inherit;font-size:.9rem;text-align:left;cursor:pointer}
+.lang:hover{background:rgba(139,92,246,.18)}
+.lang[aria-pressed="true"]{background:var(--violet);color:#fff;font-weight:700}
+.lang .flag{font-size:1.1rem;line-height:1}
+.vergrid{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px}
+.verchip{padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(22,11,46,.75);color:var(--ink);font:inherit;font-size:.85rem;cursor:pointer}
+.verchip:hover{border-color:var(--orchid);background:rgba(139,92,246,.18)}
+.verchip[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;font-weight:700}
+.verchip.avail{border-color:rgba(168,85,247,.55)}
+.verchip:disabled{opacity:.35;cursor:default}
+.verlabel{margin:0 0 4px;font-size:.9rem;color:var(--mute);font-weight:700}
+@media (max-width:899px){
+  .layout{grid-template-columns:104px minmax(0,1fr);gap:12px}
+  .cats{top:10px;max-height:calc(100vh - 20px);padding:10px 8px}
+  .catlabel{font-size:.85rem;margin-bottom:8px}
+  .cat{flex-direction:column;align-items:flex-start;gap:0;padding:8px;font-size:.88rem;overflow-wrap:anywhere}
+  .lang{font-size:.8rem;padding:6px 8px}
+  .langlist,#vers{max-height:140px}
+  .grid{grid-template-columns:1fr}
+}
+@media (hover:hover) and (pointer:fine) and (min-width:900px){
+  main{max-width:1280px;padding:0 84px}
+  .banner{max-width:1280px;padding-left:84px;padding-right:84px}
+}
+.laser.r{left:auto;right:36px;margin-left:0;margin-right:-11px}
+.pageinfo{margin:12px 0 0;color:var(--mute);font-size:.9rem}
+.pager{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
+.pager button{min-width:44px;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:rgba(22,11,46,.75);color:var(--ink);font:inherit;cursor:pointer}
+.pager button[aria-current="page"]{background:var(--violet);border-color:var(--violet);color:#fff;font-weight:700}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager .gap{color:var(--mute)}
+.online{display:inline-flex;align-items:center;gap:10px;margin:14px 0 0;padding:8px 16px;border:1px solid var(--line);border-radius:99px;background:rgba(22,11,46,.75);font-size:1rem}
+.online .dot{width:10px;height:10px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgba(74,222,128,.6);animation:pulse 2s infinite}
+.online b{color:var(--orchid);font-variant-numeric:tabular-nums;font-size:1.15rem}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+@media (prefers-reduced-motion:reduce){.online .dot{animation:none}}
+dialog{padding:0;overflow:hidden;width:min(640px,94vw);border:1px solid var(--line);border-radius:16px;background:#0f0826;color:var(--ink)}
+dialog::backdrop{background:rgba(3,1,8,.82)}
+.dlg{position:relative;padding:22px;max-height:calc(100dvh - 3rem);overflow:auto}
+.dlg img{width:100%;border-radius:10px;margin-bottom:14px}
+.dlg form{display:grid;gap:10px;margin:16px 0}
+.close{position:absolute;top:10px;right:12px;border:0;background:none;color:var(--mute);font-size:1.8rem;line-height:1;cursor:pointer}
+input,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0a0519;color:var(--ink);font:inherit}
+input[type=file]{padding:8px}
+input[type=checkbox]{width:auto;padding:0}
+label.check{display:flex;align-items:center;gap:8px}
+label{display:grid;gap:4px;font-size:.9rem;color:var(--mute)}
+.msg{margin:0;min-height:1.2em;color:var(--orchid);font-size:.9rem}
+.msg.err{color:#fca5a5}
+.x{display:block;margin-top:14px;padding:10px 16px;border:1px solid #f0abfc;border-radius:10px;background:rgba(240,171,252,.08);color:#f0abfc;cursor:pointer;font:inherit;font-size:.95rem}
+body.admin .guest,body:not(.admin) .adm{display:none}
+.welcome{margin:0 0 20px;padding-top:.3em;font-size:clamp(1.5rem,6.4vw,2.4rem);font-weight:800;line-height:1.3;color:#a855f7;text-shadow:0 0 22px rgba(168,85,247,.45)}
+.welcome .st{position:relative;display:inline-block}
+.welcome .st::after{content:"★";position:absolute;left:50%;top:-.02em;transform:translateX(-50%);font-size:.62em;line-height:1;color:#ffd43b;text-shadow:0 0 8px rgba(255,212,59,.75)}
+.nowrap{white-space:nowrap}
+.banner{max-width:1040px;margin:0 auto;padding:14px 20px 0}
+.banner .welcome{margin:0;padding-top:0}
+.welcome a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.15em;overflow-wrap:anywhere}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#adminBadge{margin-top:12px}
+#adminStar{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#adminStar::before{content:"";position:absolute;inset:-.4em -.7em -.1em}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="banner">
+  <p class="welcome"><span aria-hidden="true">W<span class="st">ı</span>llkommen be<span class="st">ı</span> Starfall, der besten Webse<span class="st" id="adminStar">ı</span>te für <span class="nowrap">TEXTURE-PACKS</span></span><span class="sr">Willkommen bei Starfall, der besten Webseite für TEXTURE-PACKS</span></p>
+</div>
+<header class="top">
+  <span id="adminBadge" class="badge" hidden>Admin</span>
+</header>
+<main>
+  <div class="hero">
+    <h1>starfalltxt</h1>
+    <p>Minecraft-Texturepacks zum kostenlosen Download.</p>
+    <a class="btn" href="#packs">Packs ansehen</a>
+  </div>
+  <section id="packs">
+    <p class="welcome">Irgendwelche Beschwerden? Schreib uns über unseren TikTok-Account <a href="https://www.tiktok.com/@real_lucky394" target="_blank" rel="noopener">@real_lucky394</a></p>
+    <h2>Texturepacks</h2>
+    <p class="mute">Tippe auf ein Pack für Beschreibung und Download.</p>
+    <div class="online"><span class="dot" aria-hidden="true"></span><span>Online Player</span><b id="onlineNum">7.000</b></div>
+    <div class="layout">
+      <aside class="cats" aria-label="Kategorien">
+        <p class="catlabel" id="catLabel">Kategorien</p>
+        <div class="catlist" id="cats"></div>
+        <hr class="langsep">
+        <p class="catlabel" id="verLabel">Versionen</p>
+        <div class="catlist" id="vers"></div>
+        <hr class="langsep">
+        <p class="catlabel" id="langLabel">Sprachen</p>
+        <div class="langlist" id="langs"></div>
+      </aside>
+      <div class="listcol">
+    <div class="search"><input id="search" type="search" placeholder="Texturepack suchen …" aria-label="Texturepack suchen" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"></div>
+    <div class="grid" id="grid"><p class="empty">Lade Packs …</p></div>
+    <div class="pagerwrap" id="pagerWrap">
+      <p class="pagelabel">Seiten wechseln</p>
+      <nav class="pager" id="pager" aria-label="Seiten wechseln"></nav>
+      <p class="pageinfo" id="pageInfo"></p>
+    </div>
+      </div>
+    </div>
+  </section>
+</main>
+<dialog id="packDlg"><div class="dlg"><button type="button" class="close" aria-label="Schließen">×</button><div id="packBody"></div></div></dialog>
+<dialog id="adminDlg"><div class="dlg">
+  <button type="button" class="close" aria-label="Schließen">×</button>
+  <form id="loginForm" class="guest">
+    <h2>Admin-Login</h2>
+    <p class="mute">Hier den GitHub-Token einfügen. Der alte Code funktioniert nicht mehr.</p>
+    <input id="pw" type="password" placeholder="GitHub-Token" autocomplete="off" required>
+    <label class="check"><input id="keep" type="checkbox"> Auf diesem Gerät angemeldet bleiben</label>
+    <button class="btn" type="submit">Einloggen</button>
+    <p class="msg" id="loginMsg" role="status"></p>
+  </form>
+  <form id="uploadForm" class="adm">
+    <h2>Neues Texturepack</h2>
+    <p class="mute">Packs werden dauerhaft im GitHub-Repo gespeichert und sind nach ca. 1–2 Minuten für alle sichtbar.</p>
+    <input name="name" placeholder="Name des Packs" maxlength="60" required>
+    <input name="mc" list="mcVersions" placeholder="Minecraft-Version, z. B. 1.21" maxlength="20">
+    <datalist id="mcVersions">
+      <option value="1.21.4"><option value="1.21.3"><option value="1.21.2"><option value="1.21.1"><option value="1.21">
+      <option value="1.20.6"><option value="1.20.5"><option value="1.20.4"><option value="1.20.2"><option value="1.20.1"><option value="1.20">
+      <option value="1.19.4"><option value="1.19.3"><option value="1.19.2"><option value="1.19">
+      <option value="1.18.2"><option value="1.18.1"><option value="1.18">
+      <option value="1.17.1"><option value="1.16.5"><option value="1.12.2"><option value="1.8.9">
+    </datalist>
+    <textarea name="desc" rows="3" maxlength="600" placeholder="Beschreibung"></textarea>
+    <p class="mute">Tipp: Schreib Wörter wie PvP, Building, FPS Boost, Bedwars oder Survival in die Beschreibung, dann erscheint das Pack in der passenden Kategorie.</p>
+    <label>ZIP-Datei (max. 15 MB) <input name="zip" type="file" accept=".zip,application/zip" required></label>
+    <label>Vorschaubild optional <input name="image" type="file" accept="image/png,image/jpeg,image/webp"></label>
+    <button class="btn" type="submit" id="upBtn">Hochladen</button>
+    <button type="button" class="btn ghost" id="logout">Abmelden</button>
+    <p class="msg" id="upMsg" role="status"></p>
+  </form>
+</div></dialog>
+<script>
+const $ = s => document.querySelector(s);
+const h = (tag, attrs = {}, ...kids) => {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids) if (c != null && c !== false) el.append(c);
+  return el;
+};
+
+const TOKEN_KEY = 'sf_gh_token';
+const LANG_KEY = 'sf_lang';
+
+// Speicher für Packs: das GitHub-Repo dieser Seite. Dateien liegen in packs/, die Liste in packs.json.
+// Owner und Repo werden aus der GitHub-Pages-Adresse erkannt; sonst hier eintragen.
+const GH_OWNER = '', GH_REPO = '';
+const GH = (() => {
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/i);
+  const owner = GH_OWNER || (m ? m[1] : '');
+  const seg = location.pathname.split('/')[1] || '';
+  const repo = GH_REPO || (m ? (seg && !seg.includes('.') ? seg : owner + '.github.io') : '');
+  return { owner, repo };
+})();
+
+const getToken = () => sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || '';
+let isAdmin = !!getToken();
+let packs = [];
+
+// ─── Languages ───────────────────────────────────────────────────────────────
+const LANGS = [
+  { id: 'de', flag: '🇩🇪', name: 'Deutsch' },
+  { id: 'en', flag: '🇬🇧', name: 'English' },
+  { id: 'es', flag: '🇪🇸', name: 'Español' },
+  { id: 'fr', flag: '🇫🇷', name: 'Français' },
+  { id: 'it', flag: '🇮🇹', name: 'Italiano' },
+  { id: 'pt', flag: '🇵🇹', name: 'Português' },
+  { id: 'nl', flag: '🇳🇱', name: 'Nederlands' },
+  { id: 'pl', flag: '🇵🇱', name: 'Polski' },
+  { id: 'ru', flag: '🇷🇺', name: 'Русский' },
+  { id: 'tr', flag: '🇹🇷', name: 'Türkçe' },
+  { id: 'zh', flag: '🇨🇳', name: '中文' },
+  { id: 'ja', flag: '🇯🇵', name: '日本語' },
+  { id: 'ko', flag: '🇰🇷', name: '한국어' },
+  { id: 'ar', flag: '🇸🇦', name: 'العربية' },
+  { id: 'sv', flag: '🇸🇪', name: 'Svenska' },
+  { id: 'cs', flag: '🇨🇿', name: 'Čeština' },
+  { id: 'uk', flag: '🇺🇦', name: 'Українська' },
+  { id: 'ro', flag: '🇷🇴', name: 'Română' },
+  { id: 'hu', flag: '🇭🇺', name: 'Magyar' },
+  { id: 'vi', flag: '🇻🇳', name: 'Tiếng Việt' },
+  { id: 'th', flag: '🇹🇭', name: 'ไทย' },
+  { id: 'id', flag: '🇮🇩', name: 'Bahasa Indonesia' },
+  { id: 'hi', flag: '🇮🇳', name: 'हिन्दी' },
+  { id: 'el', flag: '🇬🇷', name: 'Ελληνικά' },
+  { id: 'fi', flag: '🇫🇮', name: 'Suomi' },
+  { id: 'da', flag: '🇩🇰', name: 'Dansk' },
+  { id: 'no', flag: '🇳🇴', name: 'Norsk' },
+  { id: 'sk', flag: '🇸🇰', name: 'Slovenčina' },
+  { id: 'hr', flag: '🇭🇷', name: 'Hrvatski' },
+  { id: 'bg', flag: '🇧🇬', name: 'Български' }
+];
+
+const T = {
+  de: {
+    catLabel: 'Kategorien', langLabel: 'Sprachen', verLabel: 'Versionen', allVersions: 'Alle Versionen', allPacks: 'Alle Packs',
+    searchPh: 'Texturepack suchen …', packsTitle: 'Texturepacks',
+    packsHint: 'Tippe auf ein Pack für Beschreibung und Download.',
+    online: 'Online Player', pageSwitch: 'Seiten wechseln',
+    pageInfo: (p, pages, c) => `Seite ${p} von ${pages} · ${c} Pack${c === 1 ? '' : 's'}`,
+    noPacks: 'Noch keine Texturepacks. Schau bald wieder vorbei.',
+    noneFound: (cat, q) => 'Kein Texturepack gefunden' + (cat ? ` in „${cat}“` : '') + (q ? ` für „${q}“` : '') + '.',
+    download: 'Herunterladen', noDownload: 'Kein Download hinterlegt.',
+    deletePack: 'Pack löschen', deleting: 'Lösche …',
+    confirmDel: n => `Pack „${n}“ wirklich löschen?`,
+    prevPage: 'Vorherige Seite', nextPage: 'Nächste Seite', pageN: n => `Seite ${n}`,
+    close: 'Schließen', welcomeSr: 'Willkommen bei Starfall, der besten Webseite für TEXTURE-PACKS',
+    heroDesc: 'Minecraft-Texturepacks zum kostenlosen Download.', viewPacks: 'Packs ansehen',
+    complaints: 'Irgendwelche Beschwerden? Schreib uns über unseren TikTok-Account',
+    adminLogin: 'Admin-Login', tokenHint: 'Hier den GitHub-Token einfügen. Der alte Code funktioniert nicht mehr.',
+    tokenPh: 'GitHub-Token', keepLogin: 'Auf diesem Gerät angemeldet bleiben', login: 'Einloggen',
+    newPack: 'Neues Texturepack', uploadHint: 'Packs werden dauerhaft im GitHub-Repo gespeichert und sind nach ca. 1–2 Minuten für alle sichtbar.',
+    namePh: 'Name des Packs', mcPh: 'Minecraft-Version, z. B. 1.21', descPh: 'Beschreibung',
+    tipCat: 'Tipp: Schreib Wörter wie PvP, Building, FPS Boost, Bedwars oder Survival in die Beschreibung, dann erscheint das Pack in der passenden Kategorie.',
+    zipLabel: 'ZIP-Datei (max. 15 MB)', imgLabel: 'Vorschaubild optional', upload: 'Hochladen', logout: 'Abmelden',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  en: {
+    catLabel: 'Categories', langLabel: 'Languages', verLabel: 'Versions', allVersions: 'All versions', allPacks: 'All Packs',
+    searchPh: 'Search texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Tap a pack for description and download.',
+    online: 'Online Players', pageSwitch: 'Change pages',
+    pageInfo: (p, pages, c) => `Page ${p} of ${pages} · ${c} pack${c === 1 ? '' : 's'}`,
+    noPacks: 'No texture packs yet. Check back soon.',
+    noneFound: (cat, q) => 'No texture pack found' + (cat ? ` in “${cat}”` : '') + (q ? ` for “${q}”` : '') + '.',
+    download: 'Download', noDownload: 'No download available.',
+    deletePack: 'Delete pack', deleting: 'Deleting …',
+    confirmDel: n => `Really delete pack “${n}”?`,
+    prevPage: 'Previous page', nextPage: 'Next page', pageN: n => `Page ${n}`,
+    close: 'Close', welcomeSr: 'Welcome to Starfall, the best website for TEXTURE PACKS',
+    heroDesc: 'Minecraft texture packs for free download.', viewPacks: 'View packs',
+    complaints: 'Any complaints? Write to us on our TikTok account',
+    adminLogin: 'Admin Login', tokenHint: 'Paste the GitHub token here. The old code no longer works.',
+    tokenPh: 'GitHub Token', keepLogin: 'Stay logged in on this device', login: 'Log in',
+    newPack: 'New Texture Pack', uploadHint: 'Packs are stored permanently in the GitHub repo and become visible to everyone after about 1–2 minutes.',
+    namePh: 'Pack name', mcPh: 'Minecraft version, e.g. 1.21', descPh: 'Description',
+    tipCat: 'Tip: Write words like PvP, Building, FPS Boost, Bedwars or Survival in the description so the pack appears in the matching category.',
+    zipLabel: 'ZIP file (max. 15 MB)', imgLabel: 'Preview image optional', upload: 'Upload', logout: 'Log out',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  es: {
+    catLabel: 'Categorías', langLabel: 'Idiomas', verLabel: 'Versiones', allVersions: 'Todas las versiones', allPacks: 'Todos los packs',
+    searchPh: 'Buscar texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Toca un pack para ver descripción y descarga.',
+    online: 'Jugadores en línea', pageSwitch: 'Cambiar página',
+    pageInfo: (p, pages, c) => `Página ${p} de ${pages} · ${c} pack${c === 1 ? '' : 's'}`,
+    noPacks: 'Aún no hay texture packs. Vuelve pronto.',
+    noneFound: (cat, q) => 'No se encontró ningún texture pack' + (cat ? ` en “${cat}”` : '') + (q ? ` para “${q}”` : '') + '.',
+    download: 'Descargar', noDownload: 'No hay descarga disponible.',
+    deletePack: 'Eliminar pack', deleting: 'Eliminando …',
+    confirmDel: n => `¿Eliminar realmente el pack “${n}”?`,
+    prevPage: 'Página anterior', nextPage: 'Página siguiente', pageN: n => `Página ${n}`,
+    close: 'Cerrar', welcomeSr: 'Bienvenido a Starfall, el mejor sitio web de TEXTURE PACKS',
+    heroDesc: 'Texture packs de Minecraft para descargar gratis.', viewPacks: 'Ver packs',
+    complaints: '¿Alguna queja? Escríbenos en nuestra cuenta de TikTok',
+    adminLogin: 'Inicio de sesión admin', tokenHint: 'Pega aquí el token de GitHub. El código antiguo ya no funciona.',
+    tokenPh: 'Token de GitHub', keepLogin: 'Mantener sesión en este dispositivo', login: 'Iniciar sesión',
+    newPack: 'Nuevo Texture Pack', uploadHint: 'Los packs se guardan permanentemente en el repo de GitHub y son visibles para todos en 1–2 minutos.',
+    namePh: 'Nombre del pack', mcPh: 'Versión de Minecraft, p. ej. 1.21', descPh: 'Descripción',
+    tipCat: 'Consejo: Escribe palabras como PvP, Building, FPS Boost, Bedwars o Survival en la descripción para que el pack aparezca en la categoría correcta.',
+    zipLabel: 'Archivo ZIP (máx. 15 MB)', imgLabel: 'Imagen de vista previa opcional', upload: 'Subir', logout: 'Cerrar sesión',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  fr: {
+    catLabel: 'Catégories', langLabel: 'Langues', verLabel: 'Versions', allVersions: 'Toutes les versions', allPacks: 'Tous les packs',
+    searchPh: 'Rechercher des texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Appuie sur un pack pour la description et le téléchargement.',
+    online: 'Joueurs en ligne', pageSwitch: 'Changer de page',
+    pageInfo: (p, pages, c) => `Page ${p} sur ${pages} · ${c} pack${c === 1 ? '' : 's'}`,
+    noPacks: 'Pas encore de texture packs. Reviens bientôt.',
+    noneFound: (cat, q) => 'Aucun texture pack trouvé' + (cat ? ` dans « ${cat} »` : '') + (q ? ` pour « ${q} »` : '') + '.',
+    download: 'Télécharger', noDownload: 'Aucun téléchargement disponible.',
+    deletePack: 'Supprimer le pack', deleting: 'Suppression …',
+    confirmDel: n => `Vraiment supprimer le pack « ${n} » ?`,
+    prevPage: 'Page précédente', nextPage: 'Page suivante', pageN: n => `Page ${n}`,
+    close: 'Fermer', welcomeSr: 'Bienvenue sur Starfall, le meilleur site de TEXTURE PACKS',
+    heroDesc: 'Texture packs Minecraft à télécharger gratuitement.', viewPacks: 'Voir les packs',
+    complaints: 'Des plaintes ? Écris-nous sur notre compte TikTok',
+    adminLogin: 'Connexion admin', tokenHint: 'Colle le token GitHub ici. L’ancien code ne fonctionne plus.',
+    tokenPh: 'Token GitHub', keepLogin: 'Rester connecté sur cet appareil', login: 'Se connecter',
+    newPack: 'Nouveau Texture Pack', uploadHint: 'Les packs sont stockés définitivement dans le dépôt GitHub et visibles pour tous après 1–2 minutes.',
+    namePh: 'Nom du pack', mcPh: 'Version Minecraft, ex. 1.21', descPh: 'Description',
+    tipCat: 'Astuce : Écris des mots comme PvP, Building, FPS Boost, Bedwars ou Survival dans la description pour que le pack apparaisse dans la bonne catégorie.',
+    zipLabel: 'Fichier ZIP (max. 15 Mo)', imgLabel: 'Image d’aperçu optionnelle', upload: 'Téléverser', logout: 'Se déconnecter',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  it: {
+    catLabel: 'Categorie', langLabel: 'Lingue', verLabel: 'Versioni', allVersions: 'Tutte le versioni', allPacks: 'Tutti i pack',
+    searchPh: 'Cerca texture pack …', packsTitle: 'Texture pack',
+    packsHint: 'Tocca un pack per descrizione e download.',
+    online: 'Giocatori online', pageSwitch: 'Cambia pagina',
+    pageInfo: (p, pages, c) => `Pagina ${p} di ${pages} · ${c} pack`,
+    noPacks: 'Nessun texture pack ancora. Torna presto.',
+    noneFound: (cat, q) => 'Nessun texture pack trovato' + (cat ? ` in “${cat}”` : '') + (q ? ` per “${q}”` : '') + '.',
+    download: 'Scarica', noDownload: 'Nessun download disponibile.',
+    deletePack: 'Elimina pack', deleting: 'Eliminazione …',
+    confirmDel: n => `Eliminare davvero il pack “${n}”?`,
+    prevPage: 'Pagina precedente', nextPage: 'Pagina successiva', pageN: n => `Pagina ${n}`,
+    close: 'Chiudi', welcomeSr: 'Benvenuto su Starfall, il miglior sito per TEXTURE PACK',
+    heroDesc: 'Texture pack di Minecraft da scaricare gratis.', viewPacks: 'Vedi i pack',
+    complaints: 'Reclami? Scrivici sul nostro account TikTok',
+    adminLogin: 'Login admin', tokenHint: 'Incolla qui il token GitHub. Il vecchio codice non funziona più.',
+    tokenPh: 'Token GitHub', keepLogin: 'Resta connesso su questo dispositivo', login: 'Accedi',
+    newPack: 'Nuovo Texture Pack', uploadHint: 'I pack vengono salvati permanentemente nel repo GitHub e diventano visibili a tutti dopo 1–2 minuti.',
+    namePh: 'Nome del pack', mcPh: 'Versione Minecraft, es. 1.21', descPh: 'Descrizione',
+    tipCat: 'Suggerimento: Scrivi parole come PvP, Building, FPS Boost, Bedwars o Survival nella descrizione per far apparire il pack nella categoria giusta.',
+    zipLabel: 'File ZIP (max. 15 MB)', imgLabel: 'Immagine di anteprima opzionale', upload: 'Carica', logout: 'Esci',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  pt: {
+    catLabel: 'Categorias', langLabel: 'Idiomas', verLabel: 'Versões', allVersions: 'Todas as versões', allPacks: 'Todos os packs',
+    searchPh: 'Pesquisar texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Toque num pack para descrição e download.',
+    online: 'Jogadores online', pageSwitch: 'Mudar página',
+    pageInfo: (p, pages, c) => `Página ${p} de ${pages} · ${c} pack${c === 1 ? '' : 's'}`,
+    noPacks: 'Ainda sem texture packs. Volte em breve.',
+    noneFound: (cat, q) => 'Nenhum texture pack encontrado' + (cat ? ` em “${cat}”` : '') + (q ? ` para “${q}”` : '') + '.',
+    download: 'Transferir', noDownload: 'Sem download disponível.',
+    deletePack: 'Eliminar pack', deleting: 'A eliminar …',
+    confirmDel: n => `Eliminar mesmo o pack “${n}”?`,
+    prevPage: 'Página anterior', nextPage: 'Página seguinte', pageN: n => `Página ${n}`,
+    close: 'Fechar', welcomeSr: 'Bem-vindo ao Starfall, o melhor site de TEXTURE PACKS',
+    heroDesc: 'Texture packs de Minecraft para download gratuito.', viewPacks: 'Ver packs',
+    complaints: 'Reclamações? Escreve-nos na nossa conta TikTok',
+    adminLogin: 'Login admin', tokenHint: 'Cola aqui o token GitHub. O código antigo já não funciona.',
+    tokenPh: 'Token GitHub', keepLogin: 'Manter sessão neste dispositivo', login: 'Entrar',
+    newPack: 'Novo Texture Pack', uploadHint: 'Os packs são guardados permanentemente no repositório GitHub e ficam visíveis para todos após 1–2 minutos.',
+    namePh: 'Nome do pack', mcPh: 'Versão Minecraft, ex. 1.21', descPh: 'Descrição',
+    tipCat: 'Dica: Escreve palavras como PvP, Building, FPS Boost, Bedwars ou Survival na descrição para o pack aparecer na categoria certa.',
+    zipLabel: 'Ficheiro ZIP (máx. 15 MB)', imgLabel: 'Imagem de pré-visualização opcional', upload: 'Carregar', logout: 'Sair',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  nl: {
+    catLabel: 'Categorieën', langLabel: 'Talen', verLabel: 'Versies', allVersions: 'Alle versies', allPacks: 'Alle packs',
+    searchPh: 'Zoek texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Tik op een pack voor beschrijving en download.',
+    online: 'Online spelers', pageSwitch: 'Pagina wisselen',
+    pageInfo: (p, pages, c) => `Pagina ${p} van ${pages} · ${c} pack${c === 1 ? '' : 's'}`,
+    noPacks: 'Nog geen texture packs. Kom snel terug.',
+    noneFound: (cat, q) => 'Geen texture pack gevonden' + (cat ? ` in “${cat}”` : '') + (q ? ` voor “${q}”` : '') + '.',
+    download: 'Downloaden', noDownload: 'Geen download beschikbaar.',
+    deletePack: 'Pack verwijderen', deleting: 'Verwijderen …',
+    confirmDel: n => `Pack “${n}” echt verwijderen?`,
+    prevPage: 'Vorige pagina', nextPage: 'Volgende pagina', pageN: n => `Pagina ${n}`,
+    close: 'Sluiten', welcomeSr: 'Welkom bij Starfall, de beste website voor TEXTURE PACKS',
+    heroDesc: 'Minecraft texture packs gratis te downloaden.', viewPacks: 'Packs bekijken',
+    complaints: 'Klachten? Schrijf ons via ons TikTok-account',
+    adminLogin: 'Admin login', tokenHint: 'Plak hier de GitHub-token. De oude code werkt niet meer.',
+    tokenPh: 'GitHub-token', keepLogin: 'Ingelogd blijven op dit apparaat', login: 'Inloggen',
+    newPack: 'Nieuw Texture Pack', uploadHint: 'Packs worden permanent opgeslagen in de GitHub-repo en zijn na 1–2 minuten voor iedereen zichtbaar.',
+    namePh: 'Naam van het pack', mcPh: 'Minecraft-versie, bijv. 1.21', descPh: 'Beschrijving',
+    tipCat: 'Tip: Schrijf woorden zoals PvP, Building, FPS Boost, Bedwars of Survival in de beschrijving, dan verschijnt het pack in de juiste categorie.',
+    zipLabel: 'ZIP-bestand (max. 15 MB)', imgLabel: 'Voorbeeldafbeelding optioneel', upload: 'Uploaden', logout: 'Uitloggen',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  pl: {
+    catLabel: 'Kategorie', langLabel: 'Języki', verLabel: 'Wersje', allVersions: 'Wszystkie wersje', allPacks: 'Wszystkie packi',
+    searchPh: 'Szukaj texture packów …', packsTitle: 'Texture packi',
+    packsHint: 'Kliknij pack, aby zobaczyć opis i pobrać.',
+    online: 'Gracze online', pageSwitch: 'Zmień stronę',
+    pageInfo: (p, pages, c) => `Strona ${p} z ${pages} · ${c} pack${c === 1 ? '' : 'ów'}`,
+    noPacks: 'Brak texture packów. Wróć wkrótce.',
+    noneFound: (cat, q) => 'Nie znaleziono texture packa' + (cat ? ` w „${cat}”` : '') + (q ? ` dla „${q}”` : '') + '.',
+    download: 'Pobierz', noDownload: 'Brak pliku do pobrania.',
+    deletePack: 'Usuń pack', deleting: 'Usuwanie …',
+    confirmDel: n => `Naprawdę usunąć pack „${n}”?`,
+    prevPage: 'Poprzednia strona', nextPage: 'Następna strona', pageN: n => `Strona ${n}`,
+    close: 'Zamknij', welcomeSr: 'Witaj w Starfall, najlepszej stronie z TEXTURE PACKAMI',
+    heroDesc: 'Texture packi Minecraft do darmowego pobrania.', viewPacks: 'Zobacz packi',
+    complaints: 'Reklamacje? Napisz do nas na TikToku',
+    adminLogin: 'Logowanie admina', tokenHint: 'Wklej tutaj token GitHub. Stary kod już nie działa.',
+    tokenPh: 'Token GitHub', keepLogin: 'Pozostań zalogowany na tym urządzeniu', login: 'Zaloguj',
+    newPack: 'Nowy Texture Pack', uploadHint: 'Packi są trwale przechowywane w repozytorium GitHub i widoczne dla wszystkich po 1–2 minutach.',
+    namePh: 'Nazwa packa', mcPh: 'Wersja Minecraft, np. 1.21', descPh: 'Opis',
+    tipCat: 'Wskazówka: Napisz słowa jak PvP, Building, FPS Boost, Bedwars lub Survival w opisie, a pack pojawi się w odpowiedniej kategorii.',
+    zipLabel: 'Plik ZIP (maks. 15 MB)', imgLabel: 'Obraz podglądu opcjonalny', upload: 'Prześlij', logout: 'Wyloguj',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  ru: {
+    catLabel: 'Категории', langLabel: 'Языки', verLabel: 'Версии', allVersions: 'Все версии', allPacks: 'Все паки',
+    searchPh: 'Поиск текстурпаков …', packsTitle: 'Текстурпаки',
+    packsHint: 'Нажмите на пак для описания и скачивания.',
+    online: 'Игроки онлайн', pageSwitch: 'Сменить страницу',
+    pageInfo: (p, pages, c) => `Страница ${p} из ${pages} · ${c} пак${c === 1 ? '' : 'ов'}`,
+    noPacks: 'Текстурпаков пока нет. Загляните позже.',
+    noneFound: (cat, q) => 'Текстурпак не найден' + (cat ? ` в «${cat}»` : '') + (q ? ` по «${q}»` : '') + '.',
+    download: 'Скачать', noDownload: 'Скачивание недоступно.',
+    deletePack: 'Удалить пак', deleting: 'Удаление …',
+    confirmDel: n => `Действительно удалить пак «${n}»?`,
+    prevPage: 'Предыдущая страница', nextPage: 'Следующая страница', pageN: n => `Страница ${n}`,
+    close: 'Закрыть', welcomeSr: 'Добро пожаловать на Starfall — лучший сайт TEXTURE PACKS',
+    heroDesc: 'Текстурпаки Minecraft для бесплатного скачивания.', viewPacks: 'Смотреть паки',
+    complaints: 'Жалобы? Напишите нам в TikTok',
+    adminLogin: 'Вход админа', tokenHint: 'Вставьте GitHub-токен. Старый код больше не работает.',
+    tokenPh: 'GitHub-токен', keepLogin: 'Оставаться в системе на этом устройстве', login: 'Войти',
+    newPack: 'Новый текстурпак', uploadHint: 'Паки сохраняются в репозитории GitHub и становятся видимы всем через 1–2 минуты.',
+    namePh: 'Название пака', mcPh: 'Версия Minecraft, напр. 1.21', descPh: 'Описание',
+    tipCat: 'Совет: Напишите слова вроде PvP, Building, FPS Boost, Bedwars или Survival в описании, чтобы пак попал в нужную категорию.',
+    zipLabel: 'ZIP-файл (макс. 15 МБ)', imgLabel: 'Превью (необязательно)', upload: 'Загрузить', logout: 'Выйти',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  tr: {
+    catLabel: 'Kategoriler', langLabel: 'Diller', verLabel: 'Sürümler', allVersions: 'Tüm sürümler', allPacks: 'Tüm paketler',
+    searchPh: 'Texture pack ara …', packsTitle: 'Texture paketleri',
+    packsHint: 'Açıklama ve indirme için bir pakete dokun.',
+    online: 'Çevrimiçi oyuncular', pageSwitch: 'Sayfa değiştir',
+    pageInfo: (p, pages, c) => `Sayfa ${p} / ${pages} · ${c} paket`,
+    noPacks: 'Henüz texture pack yok. Yakında tekrar bak.',
+    noneFound: (cat, q) => 'Texture pack bulunamadı' + (cat ? ` “${cat}” içinde` : '') + (q ? ` “${q}” için` : '') + '.',
+    download: 'İndir', noDownload: 'İndirme mevcut değil.',
+    deletePack: 'Paketi sil', deleting: 'Siliniyor …',
+    confirmDel: n => `“${n}” paketini gerçekten silmek istiyor musun?`,
+    prevPage: 'Önceki sayfa', nextPage: 'Sonraki sayfa', pageN: n => `Sayfa ${n}`,
+    close: 'Kapat', welcomeSr: 'Starfall\'a hoş geldin, TEXTURE PACK için en iyi site',
+    heroDesc: 'Ücretsiz indirme için Minecraft texture paketleri.', viewPacks: 'Paketleri gör',
+    complaints: 'Şikayetler? TikTok hesabımızdan yaz',
+    adminLogin: 'Admin girişi', tokenHint: 'GitHub tokenini buraya yapıştır. Eski kod artık çalışmıyor.',
+    tokenPh: 'GitHub Token', keepLogin: 'Bu cihazda oturum açık kalsın', login: 'Giriş yap',
+    newPack: 'Yeni Texture Pack', uploadHint: 'Paketler GitHub deposunda kalıcı olarak saklanır ve 1–2 dakika sonra herkese görünür olur.',
+    namePh: 'Paket adı', mcPh: 'Minecraft sürümü, örn. 1.21', descPh: 'Açıklama',
+    tipCat: 'İpucu: Açıklamaya PvP, Building, FPS Boost, Bedwars veya Survival gibi kelimeler yaz, paket doğru kategoride görünsün.',
+    zipLabel: 'ZIP dosyası (maks. 15 MB)', imgLabel: 'Önizleme resmi isteğe bağlı', upload: 'Yükle', logout: 'Çıkış',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  zh: {
+    catLabel: '分类', langLabel: '语言', verLabel: '版本', allVersions: '所有版本', allPacks: '全部材质包',
+    searchPh: '搜索材质包 …', packsTitle: '材质包',
+    packsHint: '点击材质包查看描述和下载。',
+    online: '在线玩家', pageSwitch: '切换页面',
+    pageInfo: (p, pages, c) => `第 ${p} 页 / 共 ${pages} 页 · ${c} 个材质包`,
+    noPacks: '暂无材质包，请稍后再来。',
+    noneFound: (cat, q) => '未找到材质包' + (cat ? `（${cat}）` : '') + (q ? `（${q}）` : '') + '。',
+    download: '下载', noDownload: '暂无下载。',
+    deletePack: '删除材质包', deleting: '删除中 …',
+    confirmDel: n => `确定删除材质包“${n}”吗？`,
+    prevPage: '上一页', nextPage: '下一页', pageN: n => `第 ${n} 页`,
+    close: '关闭', welcomeSr: '欢迎来到 Starfall，最好的材质包网站',
+    heroDesc: '免费下载的 Minecraft 材质包。', viewPacks: '查看材质包',
+    complaints: '有投诉？通过我们的 TikTok 账号联系我们',
+    adminLogin: '管理员登录', tokenHint: '在此粘贴 GitHub Token。旧代码已失效。',
+    tokenPh: 'GitHub Token', keepLogin: '在此设备保持登录', login: '登录',
+    newPack: '新材质包', uploadHint: '材质包永久保存在 GitHub 仓库中，约 1–2 分钟后对所有人可见。',
+    namePh: '材质包名称', mcPh: 'Minecraft 版本，例如 1.21', descPh: '描述',
+    tipCat: '提示：在描述中写入 PvP、Building、FPS Boost、Bedwars 或 Survival 等词，材质包会出现在对应分类。',
+    zipLabel: 'ZIP 文件（最大 15 MB）', imgLabel: '预览图（可选）', upload: '上传', logout: '退出',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  ja: {
+    catLabel: 'カテゴリ', langLabel: '言語', verLabel: 'バージョン', allVersions: 'すべてのバージョン', allPacks: 'すべてのパック',
+    searchPh: 'テクスチャパックを検索 …', packsTitle: 'テクスチャパック',
+    packsHint: 'パックをタップして説明とダウンロードを表示。',
+    online: 'オンラインプレイヤー', pageSwitch: 'ページを切り替え',
+    pageInfo: (p, pages, c) => `${p} / ${pages} ページ · ${c} パック`,
+    noPacks: 'テクスチャパックはまだありません。また来てください。',
+    noneFound: (cat, q) => 'テクスチャパックが見つかりません' + (cat ? `（${cat}）` : '') + (q ? `（${q}）` : '') + '。',
+    download: 'ダウンロード', noDownload: 'ダウンロードがありません。',
+    deletePack: 'パックを削除', deleting: '削除中 …',
+    confirmDel: n => `パック「${n}」を本当に削除しますか？`,
+    prevPage: '前のページ', nextPage: '次のページ', pageN: n => `ページ ${n}`,
+    close: '閉じる', welcomeSr: 'Starfallへようこそ。TEXTURE PACKのベストサイト',
+    heroDesc: '無料でダウンロードできるMinecraftテクスチャパック。', viewPacks: 'パックを見る',
+    complaints: '苦情はありますか？TikTokアカウントでご連絡ください',
+    adminLogin: '管理者ログイン', tokenHint: 'GitHubトークンをここに貼り付けてください。古いコードは使えません。',
+    tokenPh: 'GitHubトークン', keepLogin: 'このデバイスでログインを維持', login: 'ログイン',
+    newPack: '新しいテクスチャパック', uploadHint: 'パックはGitHubリポジトリに永久保存され、1〜2分後に全員に表示されます。',
+    namePh: 'パック名', mcPh: 'Minecraftバージョン（例: 1.21）', descPh: '説明',
+    tipCat: 'ヒント: 説明にPvP、Building、FPS Boost、Bedwars、Survivalなどの単語を書くと、適切なカテゴリに表示されます。',
+    zipLabel: 'ZIPファイル（最大15 MB）', imgLabel: 'プレビュー画像（任意）', upload: 'アップロード', logout: 'ログアウト',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  ko: {
+    catLabel: '카테고리', langLabel: '언어', verLabel: '버전', allVersions: '모든 버전', allPacks: '모든 팩',
+    searchPh: '텍스처 팩 검색 …', packsTitle: '텍스처 팩',
+    packsHint: '팩을 탭하여 설명과 다운로드를 확인하세요.',
+    online: '온라인 플레이어', pageSwitch: '페이지 변경',
+    pageInfo: (p, pages, c) => `${p} / ${pages} 페이지 · ${c}개 팩`,
+    noPacks: '아직 텍스처 팩이 없습니다. 곧 다시 확인하세요.',
+    noneFound: (cat, q) => '텍스처 팩을 찾을 수 없습니다' + (cat ? ` (${cat})` : '') + (q ? ` (${q})` : '') + '.',
+    download: '다운로드', noDownload: '다운로드가 없습니다.',
+    deletePack: '팩 삭제', deleting: '삭제 중 …',
+    confirmDel: n => `팩 “${n}”을(를) 정말 삭제할까요?`,
+    prevPage: '이전 페이지', nextPage: '다음 페이지', pageN: n => `페이지 ${n}`,
+    close: '닫기', welcomeSr: 'Starfall에 오신 것을 환영합니다. TEXTURE PACK 최고의 사이트',
+    heroDesc: '무료로 다운로드할 수 있는 마인크래프트 텍스처 팩.', viewPacks: '팩 보기',
+    complaints: '불만이 있으신가요? TikTok 계정으로 문의해 주세요',
+    adminLogin: '관리자 로그인', tokenHint: 'GitHub 토큰을 여기에 붙여넣으세요. 이전 코드는 더 이상 작동하지 않습니다.',
+    tokenPh: 'GitHub 토큰', keepLogin: '이 기기에서 로그인 유지', login: '로그인',
+    newPack: '새 텍스처 팩', uploadHint: '팩은 GitHub 저장소에 영구 저장되며 1~2분 후 모든 사용자에게 표시됩니다.',
+    namePh: '팩 이름', mcPh: '마인크래프트 버전 (예: 1.21)', descPh: '설명',
+    tipCat: '팁: 설명에 PvP, Building, FPS Boost, Bedwars, Survival 같은 단어를 쓰면 해당 카테고리에 표시됩니다.',
+    zipLabel: 'ZIP 파일 (최대 15 MB)', imgLabel: '미리보기 이미지 (선택)', upload: '업로드', logout: '로그아웃',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  ar: {
+    catLabel: 'الفئات', langLabel: 'اللغات', verLabel: 'الإصدارات', allVersions: 'جميع الإصدارات', allPacks: 'جميع الحزم',
+    searchPh: 'ابحث عن حزم القوام …', packsTitle: 'حزم القوام',
+    packsHint: 'انقر على حزمة للوصف والتحميل.',
+    online: 'اللاعبون المتصلون', pageSwitch: 'تغيير الصفحة',
+    pageInfo: (p, pages, c) => `صفحة ${p} من ${pages} · ${c} حزمة`,
+    noPacks: 'لا توجد حزم قوام بعد. عد قريبًا.',
+    noneFound: (cat, q) => 'لم يتم العثور على حزمة قوام' + (cat ? ` في «${cat}»` : '') + (q ? ` لـ «${q}»` : '') + '.',
+    download: 'تحميل', noDownload: 'لا يوجد تحميل.',
+    deletePack: 'حذف الحزمة', deleting: 'جاري الحذف …',
+    confirmDel: n => `هل تريد حقًا حذف الحزمة «${n}»؟`,
+    prevPage: 'الصفحة السابقة', nextPage: 'الصفحة التالية', pageN: n => `صفحة ${n}`,
+    close: 'إغلاق', welcomeSr: 'مرحبًا بك في Starfall، أفضل موقع لحزم القوام',
+    heroDesc: 'حزم قوام ماينكرافت للتحميل المجاني.', viewPacks: 'عرض الحزم',
+    complaints: 'أي شكاوى؟ راسلنا عبر حساب تيك توك',
+    adminLogin: 'تسجيل دخول المسؤول', tokenHint: 'الصق رمز GitHub هنا. الرمز القديم لم يعد يعمل.',
+    tokenPh: 'رمز GitHub', keepLogin: 'البقاء مسجلاً على هذا الجهاز', login: 'تسجيل الدخول',
+    newPack: 'حزمة قوام جديدة', uploadHint: 'تُحفظ الحزم بشكل دائم في مستودع GitHub وتصبح مرئية للجميع بعد 1–2 دقيقة.',
+    namePh: 'اسم الحزمة', mcPh: 'إصدار ماينكرافت، مثل 1.21', descPh: 'الوصف',
+    tipCat: 'نصيحة: اكتب كلمات مثل PvP أو Building أو FPS Boost أو Bedwars أو Survival في الوصف لتظهر الحزمة في الفئة المناسبة.',
+    zipLabel: 'ملف ZIP (بحد أقصى 15 ميجابايت)', imgLabel: 'صورة معاينة اختيارية', upload: 'رفع', logout: 'تسجيل الخروج',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  sv: {
+    catLabel: 'Kategorier', langLabel: 'Språk', verLabel: 'Versioner', allVersions: 'Alla versioner', allPacks: 'Alla packs',
+    searchPh: 'Sök texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Tryck på ett pack för beskrivning och nedladdning.',
+    online: 'Online-spelare', pageSwitch: 'Byt sida',
+    pageInfo: (p, pages, c) => `Sida ${p} av ${pages} · ${c} pack`,
+    noPacks: 'Inga texture packs ännu. Kom tillbaka snart.',
+    noneFound: (cat, q) => 'Inget texture pack hittades' + (cat ? ` i ”${cat}”` : '') + (q ? ` för ”${q}”` : '') + '.',
+    download: 'Ladda ner', noDownload: 'Ingen nedladdning tillgänglig.',
+    deletePack: 'Ta bort pack', deleting: 'Tar bort …',
+    confirmDel: n => `Vill du verkligen ta bort pack ”${n}”?`,
+    prevPage: 'Föregående sida', nextPage: 'Nästa sida', pageN: n => `Sida ${n}`,
+    close: 'Stäng', welcomeSr: 'Välkommen till Starfall, den bästa webbplatsen för TEXTURE PACKS',
+    heroDesc: 'Minecraft texture packs för gratis nedladdning.', viewPacks: 'Visa packs',
+    complaints: 'Klagomål? Skriv till oss via vårt TikTok-konto',
+    adminLogin: 'Admin-inloggning', tokenHint: 'Klistra in GitHub-token här. Den gamla koden fungerar inte längre.',
+    tokenPh: 'GitHub-token', keepLogin: 'Förbli inloggad på denna enhet', login: 'Logga in',
+    newPack: 'Nytt Texture Pack', uploadHint: 'Packs lagras permanent i GitHub-repot och syns för alla efter 1–2 minuter.',
+    namePh: 'Packnamn', mcPh: 'Minecraft-version, t.ex. 1.21', descPh: 'Beskrivning',
+    tipCat: 'Tips: Skriv ord som PvP, Building, FPS Boost, Bedwars eller Survival i beskrivningen så visas packen i rätt kategori.',
+    zipLabel: 'ZIP-fil (max 15 MB)', imgLabel: 'Förhandsvisningsbild valfritt', upload: 'Ladda upp', logout: 'Logga ut',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  cs: {
+    catLabel: 'Kategorie', langLabel: 'Jazyky', verLabel: 'Verze', allVersions: 'Všechny verze', allPacks: 'Všechny packy',
+    searchPh: 'Hledat texture packy …', packsTitle: 'Texture packy',
+    packsHint: 'Klepněte na pack pro popis a stažení.',
+    online: 'Hráči online', pageSwitch: 'Změnit stránku',
+    pageInfo: (p, pages, c) => `Stránka ${p} z ${pages} · ${c} pack${c === 1 ? '' : 'ů'}`,
+    noPacks: 'Zatím žádné texture packy. Vraťte se brzy.',
+    noneFound: (cat, q) => 'Žádný texture pack nenalezen' + (cat ? ` v „${cat}“` : '') + (q ? ` pro „${q}“` : '') + '.',
+    download: 'Stáhnout', noDownload: 'Stažení není k dispozici.',
+    deletePack: 'Smazat pack', deleting: 'Mazání …',
+    confirmDel: n => `Opravdu smazat pack „${n}“?`,
+    prevPage: 'Předchozí stránka', nextPage: 'Další stránka', pageN: n => `Stránka ${n}`,
+    close: 'Zavřít', welcomeSr: 'Vítejte na Starfall, nejlepším webu pro TEXTURE PACKY',
+    heroDesc: 'Minecraft texture packy ke stažení zdarma.', viewPacks: 'Zobrazit packy',
+    complaints: 'Stížnosti? Napište nám na TikTok',
+    adminLogin: 'Admin přihlášení', tokenHint: 'Vložte GitHub token. Starý kód už nefunguje.',
+    tokenPh: 'GitHub token', keepLogin: 'Zůstat přihlášen na tomto zařízení', login: 'Přihlásit',
+    newPack: 'Nový Texture Pack', uploadHint: 'Packy se trvale ukládají v GitHub repozitáři a jsou viditelné všem po 1–2 minutách.',
+    namePh: 'Název packu', mcPh: 'Verze Minecraft, např. 1.21', descPh: 'Popis',
+    tipCat: 'Tip: Napište slova jako PvP, Building, FPS Boost, Bedwars nebo Survival do popisu, aby se pack zobrazil ve správné kategorii.',
+    zipLabel: 'ZIP soubor (max. 15 MB)', imgLabel: 'Náhledový obrázek volitelně', upload: 'Nahrát', logout: 'Odhlásit',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  uk: {
+    catLabel: 'Категорії', langLabel: 'Мови', verLabel: 'Версії', allVersions: 'Усі версії', allPacks: 'Усі паки',
+    searchPh: 'Пошук текстурпаків …', packsTitle: 'Текстурпаки',
+    packsHint: 'Натисніть на пак для опису та завантаження.',
+    online: 'Гравці онлайн', pageSwitch: 'Змінити сторінку',
+    pageInfo: (p, pages, c) => `Сторінка ${p} з ${pages} · ${c} пак${c === 1 ? '' : 'ів'}`,
+    noPacks: 'Текстурпаків ще немає. Завітайте пізніше.',
+    noneFound: (cat, q) => 'Текстурпак не знайдено' + (cat ? ` у «${cat}»` : '') + (q ? ` для «${q}»` : '') + '.',
+    download: 'Завантажити', noDownload: 'Завантаження недоступне.',
+    deletePack: 'Видалити пак', deleting: 'Видалення …',
+    confirmDel: n => `Справді видалити пак «${n}»?`,
+    prevPage: 'Попередня сторінка', nextPage: 'Наступна сторінка', pageN: n => `Сторінка ${n}`,
+    close: 'Закрити', welcomeSr: 'Ласкаво просимо на Starfall — найкращий сайт TEXTURE PACKS',
+    heroDesc: 'Текстурпаки Minecraft для безкоштовного завантаження.', viewPacks: 'Дивитися паки',
+    complaints: 'Скарги? Напишіть нам у TikTok',
+    adminLogin: 'Вхід адміна', tokenHint: 'Вставте GitHub-токен. Старий код більше не працює.',
+    tokenPh: 'GitHub-токен', keepLogin: 'Залишатися в системі на цьому пристрої', login: 'Увійти',
+    newPack: 'Новий текстурпак', uploadHint: 'Паки зберігаються в репозиторії GitHub і стають видимими всім через 1–2 хвилини.',
+    namePh: 'Назва пака', mcPh: 'Версія Minecraft, напр. 1.21', descPh: 'Опис',
+    tipCat: 'Порада: Напишіть слова на кшталт PvP, Building, FPS Boost, Bedwars або Survival в описі, щоб пак потрапив у потрібну категорію.',
+    zipLabel: 'ZIP-файл (макс. 15 МБ)', imgLabel: 'Прев\'ю (необов\'язково)', upload: 'Завантажити', logout: 'Вийти',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  ro: {
+    catLabel: 'Categorii', langLabel: 'Limbi', verLabel: 'Versiuni', allVersions: 'Toate versiunile', allPacks: 'Toate pack-urile',
+    searchPh: 'Caută texture pack-uri …', packsTitle: 'Texture pack-uri',
+    packsHint: 'Atinge un pack pentru descriere și descărcare.',
+    online: 'Jucători online', pageSwitch: 'Schimbă pagina',
+    pageInfo: (p, pages, c) => `Pagina ${p} din ${pages} · ${c} pack${c === 1 ? '' : '-uri'}`,
+    noPacks: 'Încă nu există texture pack-uri. Revino curând.',
+    noneFound: (cat, q) => 'Niciun texture pack găsit' + (cat ? ` în „${cat}”` : '') + (q ? ` pentru „${q}”` : '') + '.',
+    download: 'Descarcă', noDownload: 'Nicio descărcare disponibilă.',
+    deletePack: 'Șterge pack', deleting: 'Se șterge …',
+    confirmDel: n => `Ștergi cu adevărat pack-ul „${n}”?`,
+    prevPage: 'Pagina anterioară', nextPage: 'Pagina următoare', pageN: n => `Pagina ${n}`,
+    close: 'Închide', welcomeSr: 'Bine ai venit pe Starfall, cel mai bun site de TEXTURE PACKS',
+    heroDesc: 'Texture pack-uri Minecraft pentru descărcare gratuită.', viewPacks: 'Vezi pack-urile',
+    complaints: 'Reclamații? Scrie-ne pe contul nostru TikTok',
+    adminLogin: 'Autentificare admin', tokenHint: 'Lipește token-ul GitHub aici. Codul vechi nu mai funcționează.',
+    tokenPh: 'Token GitHub', keepLogin: 'Rămâi autentificat pe acest dispozitiv', login: 'Autentificare',
+    newPack: 'Texture Pack nou', uploadHint: 'Pack-urile sunt stocate permanent în repo-ul GitHub și devin vizibile tuturor după 1–2 minute.',
+    namePh: 'Numele pack-ului', mcPh: 'Versiune Minecraft, ex. 1.21', descPh: 'Descriere',
+    tipCat: 'Sfat: Scrie cuvinte precum PvP, Building, FPS Boost, Bedwars sau Survival în descriere pentru ca pack-ul să apară în categoria potrivită.',
+    zipLabel: 'Fișier ZIP (max. 15 MB)', imgLabel: 'Imagine previzualizare opțională', upload: 'Încarcă', logout: 'Deconectare',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  hu: {
+    catLabel: 'Kategóriák', langLabel: 'Nyelvek', verLabel: 'Verziók', allVersions: 'Összes verzió', allPacks: 'Összes pack',
+    searchPh: 'Texture pack keresése …', packsTitle: 'Texture packek',
+    packsHint: 'Koppints egy packre a leíráshoz és letöltéshez.',
+    online: 'Online játékosok', pageSwitch: 'Oldal váltása',
+    pageInfo: (p, pages, c) => `${p}. oldal / ${pages} · ${c} pack`,
+    noPacks: 'Még nincsenek texture packek. Nézz vissza hamarosan.',
+    noneFound: (cat, q) => 'Nem található texture pack' + (cat ? ` a(z) „${cat}” kategóriában` : '') + (q ? ` a(z) „${q}” keresésre` : '') + '.',
+    download: 'Letöltés', noDownload: 'Nincs letöltés.',
+    deletePack: 'Pack törlése', deleting: 'Törlés …',
+    confirmDel: n => `Tényleg törölni a(z) „${n}” packot?`,
+    prevPage: 'Előző oldal', nextPage: 'Következő oldal', pageN: n => `${n}. oldal`,
+    close: 'Bezárás', welcomeSr: 'Üdv a Starfallon, a legjobb TEXTURE PACK oldalon',
+    heroDesc: 'Ingyenesen letölthető Minecraft texture packek.', viewPacks: 'Packek megtekintése',
+    complaints: 'Panasz? Írj nekünk a TikTok fiókunkon',
+    adminLogin: 'Admin bejelentkezés', tokenHint: 'Illeszd be a GitHub tokent. A régi kód már nem működik.',
+    tokenPh: 'GitHub token', keepLogin: 'Maradj bejelentkezve ezen az eszközön', login: 'Bejelentkezés',
+    newPack: 'Új Texture Pack', uploadHint: 'A packek véglegesen a GitHub repóban tárolódnak, és 1–2 perc múlva mindenki számára láthatók.',
+    namePh: 'Pack neve', mcPh: 'Minecraft verzió, pl. 1.21', descPh: 'Leírás',
+    tipCat: 'Tipp: Írj olyan szavakat a leírásba, mint PvP, Building, FPS Boost, Bedwars vagy Survival, hogy a pack a megfelelő kategóriában jelenjen meg.',
+    zipLabel: 'ZIP fájl (max. 15 MB)', imgLabel: 'Előnézeti kép opcionális', upload: 'Feltöltés', logout: 'Kijelentkezés',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  vi: {
+    catLabel: 'Danh mục', langLabel: 'Ngôn ngữ', verLabel: 'Phiên bản', allVersions: 'Tất cả phiên bản', allPacks: 'Tất cả gói',
+    searchPh: 'Tìm texture pack …', packsTitle: 'Texture pack',
+    packsHint: 'Chạm vào gói để xem mô tả và tải xuống.',
+    online: 'Người chơi online', pageSwitch: 'Đổi trang',
+    pageInfo: (p, pages, c) => `Trang ${p} / ${pages} · ${c} gói`,
+    noPacks: 'Chưa có texture pack. Quay lại sau nhé.',
+    noneFound: (cat, q) => 'Không tìm thấy texture pack' + (cat ? ` trong “${cat}”` : '') + (q ? ` cho “${q}”` : '') + '.',
+    download: 'Tải xuống', noDownload: 'Không có bản tải.',
+    deletePack: 'Xóa gói', deleting: 'Đang xóa …',
+    confirmDel: n => `Thật sự xóa gói “${n}”?`,
+    prevPage: 'Trang trước', nextPage: 'Trang sau', pageN: n => `Trang ${n}`,
+    close: 'Đóng', welcomeSr: 'Chào mừng đến Starfall, trang web TEXTURE PACK tốt nhất',
+    heroDesc: 'Texture pack Minecraft tải miễn phí.', viewPacks: 'Xem gói',
+    complaints: 'Khiếu nại? Viết cho chúng tôi qua tài khoản TikTok',
+    adminLogin: 'Đăng nhập admin', tokenHint: 'Dán token GitHub vào đây. Mã cũ không còn hoạt động.',
+    tokenPh: 'Token GitHub', keepLogin: 'Giữ đăng nhập trên thiết bị này', login: 'Đăng nhập',
+    newPack: 'Texture Pack mới', uploadHint: 'Gói được lưu vĩnh viễn trong repo GitHub và hiện với mọi người sau 1–2 phút.',
+    namePh: 'Tên gói', mcPh: 'Phiên bản Minecraft, vd. 1.21', descPh: 'Mô tả',
+    tipCat: 'Mẹo: Viết các từ như PvP, Building, FPS Boost, Bedwars hoặc Survival trong mô tả để gói xuất hiện đúng danh mục.',
+    zipLabel: 'Tệp ZIP (tối đa 15 MB)', imgLabel: 'Ảnh xem trước (tùy chọn)', upload: 'Tải lên', logout: 'Đăng xuất',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  th: {
+    catLabel: 'หมวดหมู่', langLabel: 'ภาษา', verLabel: 'เวอร์ชัน', allVersions: 'ทุกเวอร์ชัน', allPacks: 'แพ็กทั้งหมด',
+    searchPh: 'ค้นหา texture pack …', packsTitle: 'Texture packs',
+    packsHint: 'แตะแพ็กเพื่อดูคำอธิบายและดาวน์โหลด',
+    online: 'ผู้เล่นออนไลน์', pageSwitch: 'เปลี่ยนหน้า',
+    pageInfo: (p, pages, c) => `หน้า ${p} จาก ${pages} · ${c} แพ็ก`,
+    noPacks: 'ยังไม่มี texture pack กลับมาใหม่นะ',
+    noneFound: (cat, q) => 'ไม่พบ texture pack' + (cat ? ` ใน “${cat}”` : '') + (q ? ` สำหรับ “${q}”` : '') + '',
+    download: 'ดาวน์โหลด', noDownload: 'ไม่มีไฟล์ดาวน์โหลด',
+    deletePack: 'ลบแพ็ก', deleting: 'กำลังลบ …',
+    confirmDel: n => `ต้องการลบแพ็ก “${n}” จริงหรือ?`,
+    prevPage: 'หน้าก่อน', nextPage: 'หน้าถัดไป', pageN: n => `หน้า ${n}`,
+    close: 'ปิด', welcomeSr: 'ยินดีต้อนรับสู่ Starfall เว็บไซต์ TEXTURE PACK ที่ดีที่สุด',
+    heroDesc: 'Texture pack Minecraft ดาวน์โหลดฟรี', viewPacks: 'ดูแพ็ก',
+    complaints: 'มีข้อร้องเรียน? เขียนหาเราทางบัญชี TikTok',
+    adminLogin: 'เข้าสู่ระบบแอดมิน', tokenHint: 'วาง GitHub Token ที่นี่ โค้ดเก่าใช้ไม่ได้แล้ว',
+    tokenPh: 'GitHub Token', keepLogin: 'อยู่ในระบบบนอุปกรณ์นี้', login: 'เข้าสู่ระบบ',
+    newPack: 'Texture Pack ใหม่', uploadHint: 'แพ็กจะถูกเก็บถาวรใน GitHub repo และเห็นได้ทุกคนหลัง 1–2 นาที',
+    namePh: 'ชื่อแพ็ก', mcPh: 'เวอร์ชัน Minecraft เช่น 1.21', descPh: 'คำอธิบาย',
+    tipCat: 'เคล็ดลับ: เขียนคำอย่าง PvP, Building, FPS Boost, Bedwars หรือ Survival ในคำอธิบาย แพ็กจะขึ้นในหมวดที่ถูกต้อง',
+    zipLabel: 'ไฟล์ ZIP (สูงสุด 15 MB)', imgLabel: 'รูปตัวอย่าง (ไม่บังคับ)', upload: 'อัปโหลด', logout: 'ออกจากระบบ',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  id: {
+    catLabel: 'Kategori', langLabel: 'Bahasa', verLabel: 'Versi', allVersions: 'Semua versi', allPacks: 'Semua pack',
+    searchPh: 'Cari texture pack …', packsTitle: 'Texture pack',
+    packsHint: 'Ketuk pack untuk deskripsi dan unduhan.',
+    online: 'Pemain online', pageSwitch: 'Ganti halaman',
+    pageInfo: (p, pages, c) => `Halaman ${p} dari ${pages} · ${c} pack`,
+    noPacks: 'Belum ada texture pack. Kembali lagi nanti.',
+    noneFound: (cat, q) => 'Texture pack tidak ditemukan' + (cat ? ` di “${cat}”` : '') + (q ? ` untuk “${q}”` : '') + '.',
+    download: 'Unduh', noDownload: 'Tidak ada unduhan.',
+    deletePack: 'Hapus pack', deleting: 'Menghapus …',
+    confirmDel: n => `Yakin hapus pack “${n}”?`,
+    prevPage: 'Halaman sebelumnya', nextPage: 'Halaman berikutnya', pageN: n => `Halaman ${n}`,
+    close: 'Tutup', welcomeSr: 'Selamat datang di Starfall, situs TEXTURE PACK terbaik',
+    heroDesc: 'Texture pack Minecraft unduhan gratis.', viewPacks: 'Lihat pack',
+    complaints: 'Keluhan? Tulis kami di akun TikTok',
+    adminLogin: 'Login admin', tokenHint: 'Tempel token GitHub di sini. Kode lama tidak lagi berfungsi.',
+    tokenPh: 'Token GitHub', keepLogin: 'Tetap login di perangkat ini', login: 'Masuk',
+    newPack: 'Texture Pack baru', uploadHint: 'Pack disimpan permanen di repo GitHub dan terlihat semua orang setelah 1–2 menit.',
+    namePh: 'Nama pack', mcPh: 'Versi Minecraft, mis. 1.21', descPh: 'Deskripsi',
+    tipCat: 'Tip: Tulis kata seperti PvP, Building, FPS Boost, Bedwars atau Survival di deskripsi agar pack muncul di kategori yang tepat.',
+    zipLabel: 'File ZIP (maks. 15 MB)', imgLabel: 'Gambar pratinjau opsional', upload: 'Unggah', logout: 'Keluar',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  hi: {
+    catLabel: 'श्रेणियाँ', langLabel: 'भाषाएँ', verLabel: 'संस्करण', allVersions: 'सभी संस्करण', allPacks: 'सभी पैक',
+    searchPh: 'टेक्सचर पैक खोजें …', packsTitle: 'टेक्सचर पैक',
+    packsHint: 'विवरण और डाउनलोड के लिए पैक पर टैप करें।',
+    online: 'ऑनलाइन खिलाड़ी', pageSwitch: 'पेज बदलें',
+    pageInfo: (p, pages, c) => `पेज ${p} / ${pages} · ${c} पैक`,
+    noPacks: 'अभी कोई टेक्सचर पैक नहीं। जल्द वापस आएँ।',
+    noneFound: (cat, q) => 'कोई टेक्सचर पैक नहीं मिला' + (cat ? ` “${cat}” में` : '') + (q ? ` “${q}” के लिए` : '') + '।',
+    download: 'डाउनलोड', noDownload: 'डाउनलोड उपलब्ध नहीं।',
+    deletePack: 'पैक हटाएँ', deleting: 'हटा रहा है …',
+    confirmDel: n => `क्या सच में पैक “${n}” हटाना है?`,
+    prevPage: 'पिछला पेज', nextPage: 'अगला पेज', pageN: n => `पेज ${n}`,
+    close: 'बंद करें', welcomeSr: 'Starfall में आपका स्वागत है, TEXTURE PACK की सबसे अच्छी साइट',
+    heroDesc: 'मुफ़्त डाउनलोड के लिए Minecraft टेक्सचर पैक।', viewPacks: 'पैक देखें',
+    complaints: 'शिकायत? हमारे TikTok अकाउंट पर लिखें',
+    adminLogin: 'एडमिन लॉगिन', tokenHint: 'GitHub टोकन यहाँ पेस्ट करें। पुराना कोड काम नहीं करता।',
+    tokenPh: 'GitHub टोकन', keepLogin: 'इस डिवाइस पर लॉगिन रखें', login: 'लॉगिन',
+    newPack: 'नया टेक्सचर पैक', uploadHint: 'पैक GitHub रेपो में स्थायी रूप से सेव होते हैं और 1–2 मिनट बाद सभी को दिखते हैं।',
+    namePh: 'पैक का नाम', mcPh: 'Minecraft वर्शन, जैसे 1.21', descPh: 'विवरण',
+    tipCat: 'टिप: विवरण में PvP, Building, FPS Boost, Bedwars या Survival जैसे शब्द लिखें ताकि पैक सही श्रेणी में दिखे।',
+    zipLabel: 'ZIP फ़ाइल (अधिकतम 15 MB)', imgLabel: 'पूर्वावलोकन छवि वैकल्पिक', upload: 'अपलोड', logout: 'लॉग आउट',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  el: {
+    catLabel: 'Κατηγορίες', langLabel: 'Γλώσσες', verLabel: 'Εκδόσεις', allVersions: 'Όλες οι εκδόσεις', allPacks: 'Όλα τα packs',
+    searchPh: 'Αναζήτηση texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Πατήστε ένα pack για περιγραφή και λήψη.',
+    online: 'Παίκτες online', pageSwitch: 'Αλλαγή σελίδας',
+    pageInfo: (p, pages, c) => `Σελίδα ${p} από ${pages} · ${c} pack`,
+    noPacks: 'Δεν υπάρχουν ακόμα texture packs. Επιστρέψτε σύντομα.',
+    noneFound: (cat, q) => 'Δεν βρέθηκε texture pack' + (cat ? ` στο «${cat}»` : '') + (q ? ` για «${q}»` : '') + '.',
+    download: 'Λήψη', noDownload: 'Δεν υπάρχει λήψη.',
+    deletePack: 'Διαγραφή pack', deleting: 'Διαγραφή …',
+    confirmDel: n => `Θέλετε πραγματικά να διαγράψετε το pack «${n}»;`,
+    prevPage: 'Προηγούμενη σελίδα', nextPage: 'Επόμενη σελίδα', pageN: n => `Σελίδα ${n}`,
+    close: 'Κλείσιμο', welcomeSr: 'Καλώς ήρθατε στο Starfall, την καλύτερη ιστοσελίδα για TEXTURE PACKS',
+    heroDesc: 'Texture packs Minecraft για δωρεάν λήψη.', viewPacks: 'Δείτε packs',
+    complaints: 'Παράπονα; Γράψτε μας στο TikTok',
+    adminLogin: 'Σύνδεση admin', tokenHint: 'Επικολλήστε το token GitHub εδώ. Ο παλιός κώδικας δεν λειτουργεί πλέον.',
+    tokenPh: 'Token GitHub', keepLogin: 'Μείνετε συνδεδεμένοι σε αυτή τη συσκευή', login: 'Σύνδεση',
+    newPack: 'Νέο Texture Pack', uploadHint: 'Τα packs αποθηκεύονται μόνιμα στο repo GitHub και εμφανίζονται σε όλους μετά από 1–2 λεπτά.',
+    namePh: 'Όνομα pack', mcPh: 'Έκδοση Minecraft, π.χ. 1.21', descPh: 'Περιγραφή',
+    tipCat: 'Συμβουλή: Γράψτε λέξεις όπως PvP, Building, FPS Boost, Bedwars ή Survival στην περιγραφή για να εμφανιστεί το pack στη σωστή κατηγορία.',
+    zipLabel: 'Αρχείο ZIP (μέγ. 15 MB)', imgLabel: 'Εικόνα προεπισκόπησης προαιρετική', upload: 'Μεταφόρτωση', logout: 'Αποσύνδεση',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  fi: {
+    catLabel: 'Kategoriat', langLabel: 'Kielet', verLabel: 'Versiot', allVersions: 'Kaikki versiot', allPacks: 'Kaikki packit',
+    searchPh: 'Etsi texture packeja …', packsTitle: 'Texture packit',
+    packsHint: 'Napauta packia kuvauksen ja latauksen saamiseksi.',
+    online: 'Online-pelaajat', pageSwitch: 'Vaihda sivua',
+    pageInfo: (p, pages, c) => `Sivu ${p} / ${pages} · ${c} pack`,
+    noPacks: 'Ei vielä texture packeja. Palaa pian.',
+    noneFound: (cat, q) => 'Texture packia ei löytynyt' + (cat ? ` kategoriasta ”${cat}”` : '') + (q ? ` haulle ”${q}”` : '') + '.',
+    download: 'Lataa', noDownload: 'Ei latausta saatavilla.',
+    deletePack: 'Poista pack', deleting: 'Poistetaan …',
+    confirmDel: n => `Poistetaanko pack ”${n}” oikeasti?`,
+    prevPage: 'Edellinen sivu', nextPage: 'Seuraava sivu', pageN: n => `Sivu ${n}`,
+    close: 'Sulje', welcomeSr: 'Tervetuloa Starfalliin, parhaaseen TEXTURE PACK -sivustoon',
+    heroDesc: 'Ilmaiseksi ladattavia Minecraft-texture packeja.', viewPacks: 'Näytä packit',
+    complaints: 'Valituksia? Kirjoita meille TikTok-tilillä',
+    adminLogin: 'Admin-kirjautuminen', tokenHint: 'Liitä GitHub-token tähän. Vanha koodi ei enää toimi.',
+    tokenPh: 'GitHub-token', keepLogin: 'Pysy kirjautuneena tällä laitteella', login: 'Kirjaudu',
+    newPack: 'Uusi Texture Pack', uploadHint: 'Packit tallennetaan pysyvästi GitHub-repoon ja näkyvät kaikille 1–2 minuutin kuluttua.',
+    namePh: 'Packin nimi', mcPh: 'Minecraft-versio, esim. 1.21', descPh: 'Kuvaus',
+    tipCat: 'Vinkki: Kirjoita kuvaukseen sanoja kuten PvP, Building, FPS Boost, Bedwars tai Survival, niin pack näkyy oikeassa kategoriassa.',
+    zipLabel: 'ZIP-tiedosto (max. 15 MB)', imgLabel: 'Esikatselukuva valinnainen', upload: 'Lataa', logout: 'Kirjaudu ulos',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  da: {
+    catLabel: 'Kategorier', langLabel: 'Sprog', verLabel: 'Versioner', allVersions: 'Alle versioner', allPacks: 'Alle packs',
+    searchPh: 'Søg texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Tryk på et pack for beskrivelse og download.',
+    online: 'Online spillere', pageSwitch: 'Skift side',
+    pageInfo: (p, pages, c) => `Side ${p} af ${pages} · ${c} pack`,
+    noPacks: 'Ingen texture packs endnu. Kom snart tilbage.',
+    noneFound: (cat, q) => 'Intet texture pack fundet' + (cat ? ` i ”${cat}”` : '') + (q ? ` for ”${q}”` : '') + '.',
+    download: 'Download', noDownload: 'Ingen download tilgængelig.',
+    deletePack: 'Slet pack', deleting: 'Sletter …',
+    confirmDel: n => `Slet virkelig pack ”${n}”?`,
+    prevPage: 'Forrige side', nextPage: 'Næste side', pageN: n => `Side ${n}`,
+    close: 'Luk', welcomeSr: 'Velkommen til Starfall, den bedste side for TEXTURE PACKS',
+    heroDesc: 'Minecraft texture packs til gratis download.', viewPacks: 'Se packs',
+    complaints: 'Klager? Skriv til os på vores TikTok-konto',
+    adminLogin: 'Admin-login', tokenHint: 'Indsæt GitHub-token her. Den gamle kode virker ikke længere.',
+    tokenPh: 'GitHub-token', keepLogin: 'Bliv logget ind på denne enhed', login: 'Log ind',
+    newPack: 'Nyt Texture Pack', uploadHint: 'Packs gemmes permanent i GitHub-repoet og er synlige for alle efter 1–2 minutter.',
+    namePh: 'Pack-navn', mcPh: 'Minecraft-version, f.eks. 1.21', descPh: 'Beskrivelse',
+    tipCat: 'Tip: Skriv ord som PvP, Building, FPS Boost, Bedwars eller Survival i beskrivelsen, så packet vises i den rigtige kategori.',
+    zipLabel: 'ZIP-fil (maks. 15 MB)', imgLabel: 'Forhåndsvisningsbillede valgfrit', upload: 'Upload', logout: 'Log ud',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  no: {
+    catLabel: 'Kategorier', langLabel: 'Språk', verLabel: 'Versjoner', allVersions: 'Alle versjoner', allPacks: 'Alle packs',
+    searchPh: 'Søk texture packs …', packsTitle: 'Texture packs',
+    packsHint: 'Trykk på et pack for beskrivelse og nedlasting.',
+    online: 'Spillere online', pageSwitch: 'Bytt side',
+    pageInfo: (p, pages, c) => `Side ${p} av ${pages} · ${c} pack`,
+    noPacks: 'Ingen texture packs ennå. Kom snart tilbake.',
+    noneFound: (cat, q) => 'Ingen texture pack funnet' + (cat ? ` i ”${cat}”` : '') + (q ? ` for ”${q}”` : '') + '.',
+    download: 'Last ned', noDownload: 'Ingen nedlasting tilgjengelig.',
+    deletePack: 'Slett pack', deleting: 'Sletter …',
+    confirmDel: n => `Slette pack ”${n}” på ekte?`,
+    prevPage: 'Forrige side', nextPage: 'Neste side', pageN: n => `Side ${n}`,
+    close: 'Lukk', welcomeSr: 'Velkommen til Starfall, den beste siden for TEXTURE PACKS',
+    heroDesc: 'Minecraft texture packs for gratis nedlasting.', viewPacks: 'Se packs',
+    complaints: 'Klager? Skriv til oss på TikTok-kontoen vår',
+    adminLogin: 'Admin-innlogging', tokenHint: 'Lim inn GitHub-token her. Den gamle koden fungerer ikke lenger.',
+    tokenPh: 'GitHub-token', keepLogin: 'Hold deg innlogget på denne enheten', login: 'Logg inn',
+    newPack: 'Nytt Texture Pack', uploadHint: 'Packs lagres permanent i GitHub-repoet og blir synlige for alle etter 1–2 minutter.',
+    namePh: 'Pack-navn', mcPh: 'Minecraft-versjon, f.eks. 1.21', descPh: 'Beskrivelse',
+    tipCat: 'Tips: Skriv ord som PvP, Building, FPS Boost, Bedwars eller Survival i beskrivelsen, så vises packet i riktig kategori.',
+    zipLabel: 'ZIP-fil (maks. 15 MB)', imgLabel: 'Forhåndsvisningsbilde valgfritt', upload: 'Last opp', logout: 'Logg ut',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  sk: {
+    catLabel: 'Kategórie', langLabel: 'Jazyky', verLabel: 'Verzie', allVersions: 'Všetky verzie', allPacks: 'Všetky packy',
+    searchPh: 'Hľadať texture packy …', packsTitle: 'Texture packy',
+    packsHint: 'Klepnite na pack pre popis a stiahnutie.',
+    online: 'Hráči online', pageSwitch: 'Zmeniť stránku',
+    pageInfo: (p, pages, c) => `Stránka ${p} z ${pages} · ${c} pack${c === 1 ? '' : 'ov'}`,
+    noPacks: 'Zatiaľ žiadne texture packy. Vráťte sa čoskoro.',
+    noneFound: (cat, q) => 'Žiadny texture pack nenájdený' + (cat ? ` v „${cat}“` : '') + (q ? ` pre „${q}“` : '') + '.',
+    download: 'Stiahnuť', noDownload: 'Stiahnutie nie je k dispozícii.',
+    deletePack: 'Zmazať pack', deleting: 'Mazanie …',
+    confirmDel: n => `Naozaj zmazať pack „${n}“?`,
+    prevPage: 'Predchádzajúca stránka', nextPage: 'Ďalšia stránka', pageN: n => `Stránka ${n}`,
+    close: 'Zavrieť', welcomeSr: 'Vitajte na Starfall, najlepšom webe pre TEXTURE PACKY',
+    heroDesc: 'Minecraft texture packy na stiahnutie zadarmo.', viewPacks: 'Zobraziť packy',
+    complaints: 'Sťažnosti? Napíšte nám na TikTok',
+    adminLogin: 'Admin prihlásenie', tokenHint: 'Vložte GitHub token. Starý kód už nefunguje.',
+    tokenPh: 'GitHub token', keepLogin: 'Zostať prihlásený na tomto zariadení', login: 'Prihlásiť',
+    newPack: 'Nový Texture Pack', uploadHint: 'Packy sa trvalo ukladajú v GitHub repozitári a sú viditeľné všetkým po 1–2 minútach.',
+    namePh: 'Názov packu', mcPh: 'Verzia Minecraft, napr. 1.21', descPh: 'Popis',
+    tipCat: 'Tip: Napíšte slová ako PvP, Building, FPS Boost, Bedwars alebo Survival do popisu, aby sa pack zobrazil v správnej kategórii.',
+    zipLabel: 'ZIP súbor (max. 15 MB)', imgLabel: 'Náhľadový obrázok voliteľne', upload: 'Nahrať', logout: 'Odhlásiť',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  hr: {
+    catLabel: 'Kategorije', langLabel: 'Jezici', verLabel: 'Verzije', allVersions: 'Sve verzije', allPacks: 'Svi packovi',
+    searchPh: 'Traži texture packove …', packsTitle: 'Texture packovi',
+    packsHint: 'Dodirni pack za opis i preuzimanje.',
+    online: 'Igrači online', pageSwitch: 'Promijeni stranicu',
+    pageInfo: (p, pages, c) => `Stranica ${p} od ${pages} · ${c} pack`,
+    noPacks: 'Još nema texture packova. Vrati se uskoro.',
+    noneFound: (cat, q) => 'Nije pronađen texture pack' + (cat ? ` u „${cat}”` : '') + (q ? ` za „${q}”` : '') + '.',
+    download: 'Preuzmi', noDownload: 'Nema preuzimanja.',
+    deletePack: 'Obriši pack', deleting: 'Brisanje …',
+    confirmDel: n => `Stvarno obrisati pack „${n}”?`,
+    prevPage: 'Prethodna stranica', nextPage: 'Sljedeća stranica', pageN: n => `Stranica ${n}`,
+    close: 'Zatvori', welcomeSr: 'Dobrodošli na Starfall, najbolju stranicu za TEXTURE PACKOVE',
+    heroDesc: 'Minecraft texture packovi za besplatno preuzimanje.', viewPacks: 'Pogledaj packove',
+    complaints: 'Pritužbe? Piši nam na TikTok računu',
+    adminLogin: 'Admin prijava', tokenHint: 'Zalijepi GitHub token ovdje. Stari kod više ne radi.',
+    tokenPh: 'GitHub token', keepLogin: 'Ostani prijavljen na ovom uređaju', login: 'Prijava',
+    newPack: 'Novi Texture Pack', uploadHint: 'Packovi se trajno spremaju u GitHub repo i postaju vidljivi svima nakon 1–2 minute.',
+    namePh: 'Naziv packa', mcPh: 'Minecraft verzija, npr. 1.21', descPh: 'Opis',
+    tipCat: 'Savjet: Upiši riječi poput PvP, Building, FPS Boost, Bedwars ili Survival u opis da se pack pojavi u pravoj kategoriji.',
+    zipLabel: 'ZIP datoteka (max. 15 MB)', imgLabel: 'Slika pregleda opcionalno', upload: 'Učitaj', logout: 'Odjava',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  },
+  bg: {
+    catLabel: 'Категории', langLabel: 'Езици', verLabel: 'Версии', allVersions: 'Всички версии', allPacks: 'Всички пакове',
+    searchPh: 'Търсене на текстурпакове …', packsTitle: 'Текстурпакове',
+    packsHint: 'Докоснете пак за описание и изтегляне.',
+    online: 'Играчи онлайн', pageSwitch: 'Смяна на страница',
+    pageInfo: (p, pages, c) => `Страница ${p} от ${pages} · ${c} пак`,
+    noPacks: 'Все още няма текстурпакове. Върнете се скоро.',
+    noneFound: (cat, q) => 'Не е намерен текстурпак' + (cat ? ` в „${cat}“` : '') + (q ? ` за „${q}“` : '') + '.',
+    download: 'Изтегли', noDownload: 'Няма налично изтегляне.',
+    deletePack: 'Изтрий пак', deleting: 'Изтриване …',
+    confirmDel: n => `Наистина ли да изтрием пак „${n}“?`,
+    prevPage: 'Предишна страница', nextPage: 'Следваща страница', pageN: n => `Страница ${n}`,
+    close: 'Затвори', welcomeSr: 'Добре дошли в Starfall, най-добрият сайт за TEXTURE PACKS',
+    heroDesc: 'Minecraft текстурпакове за безплатно изтегляне.', viewPacks: 'Виж пакове',
+    complaints: 'Оплаквания? Пишете ни в TikTok',
+    adminLogin: 'Админ вход', tokenHint: 'Поставете GitHub токен тук. Старият код вече не работи.',
+    tokenPh: 'GitHub токен', keepLogin: 'Остани влязъл на това устройство', login: 'Вход',
+    newPack: 'Нов текстурпак', uploadHint: 'Паковете се съхраняват постоянно в GitHub репото и стават видими за всички след 1–2 минути.',
+    namePh: 'Име на пака', mcPh: 'Minecraft версия, напр. 1.21', descPh: 'Описание',
+    tipCat: 'Съвет: Напишете думи като PvP, Building, FPS Boost, Bedwars или Survival в описанието, за да се появи пакът в правилната категория.',
+    zipLabel: 'ZIP файл (макс. 15 MB)', imgLabel: 'Изображение за преглед (по избор)', upload: 'Качи', logout: 'Изход',
+    cats: { pvp: 'PvP', building: 'Building', fps: 'FPS Boost', bedwars: 'Bedwars', survival: 'Survival' }
+  }
+};
+
+let lang = localStorage.getItem(LANG_KEY) || 'de';
+if (!T[lang]) lang = 'de';
+const t = () => T[lang] || T.de;
+
+function applyLang() {
+  const tr = t();
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  $('#catLabel').textContent = tr.catLabel;
+  const verLab = $('#verLabel');
+  if (verLab) verLab.textContent = tr.verLabel || 'Versions';
+  $('#langLabel').textContent = tr.langLabel;
+  const search = $('#search');
+  if (search) search.placeholder = tr.searchPh;
+  const packsH2 = $('#packs h2');
+  if (packsH2) packsH2.textContent = tr.packsTitle;
+  const packsHint = $('#packs .mute');
+  if (packsHint) packsHint.textContent = tr.packsHint;
+  const onlineLabel = document.querySelector('.online span:not(.dot)');
+  if (onlineLabel) onlineLabel.textContent = tr.online;
+  const pageLabel = $('.pagelabel');
+  if (pageLabel) pageLabel.textContent = tr.pageSwitch;
+  const heroP = $('.hero p');
+  if (heroP) heroP.textContent = tr.heroDesc;
+  const heroBtn = $('.hero .btn');
+  if (heroBtn) heroBtn.textContent = tr.viewPacks;
+  // Top banner welcome (decorative + screen-reader)
+  // Stars sit on every "i" / "ı" like the original design
+  const bannerWelcome = document.querySelector('.banner .welcome');
+  if (bannerWelcome && tr.welcomeSr) {
+    const text = tr.welcomeSr;
+    const letters = [...text];
+    const iIdx = [];
+    for (let i = 0; i < letters.length; i++) {
+      if (/[iıİIíìîïΙιі]/i.test(letters[i])) iIdx.push(i);
+    }
+    // fallback if the language has no "i": a few letters so the look stays
+    if (iIdx.length === 0) {
+      for (let i = 0; i < Math.min(3, letters.length); i++) {
+        if (letters[i].trim()) iIdx.push(i);
+      }
+    }
+    const adminAt = iIdx[Math.min(2, iIdx.length - 1)] ?? iIdx[iIdx.length - 1] ?? 0;
+    const visual = h('span', { 'aria-hidden': 'true' });
+    letters.forEach((ch, i) => {
+      if (iIdx.includes(i)) {
+        // dotless ı so the star sits cleanly where the i-dot would be
+        const show = /[iIíìîïΙιі]/i.test(ch) ? 'ı' : ch;
+        visual.append(h('span', { class: 'st', ...(i === adminAt ? { id: 'adminStar' } : {}) }, show));
+      } else {
+        visual.append(document.createTextNode(ch));
+      }
+    });
+    bannerWelcome.replaceChildren(visual, h('span', { class: 'sr' }, text));
+    // re-bind admin star tap (5×)
+    const star = $('#adminStar');
+    if (star) {
+      let taps = 0, timer;
+      star.addEventListener('click', () => {
+        clearTimeout(timer);
+        if (++taps >= 5) { taps = 0; openAdmin(); return; }
+        timer = setTimeout(() => { taps = 0; }, 1500);
+      });
+    }
+  }
+  // complaints line
+  const compl = document.querySelector('#packs > .welcome');
+  if (compl) {
+    const a = compl.querySelector('a');
+    const href = a ? a.href : 'https://www.tiktok.com/@real_lucky394';
+    const handle = a ? a.textContent : '@real_lucky394';
+    compl.replaceChildren(
+      document.createTextNode(tr.complaints + ' '),
+      h('a', { href, target: '_blank', rel: 'noopener' }, handle)
+    );
+  }
+  // admin dialog static bits
+  const loginH2 = $('#loginForm h2');
+  if (loginH2) loginH2.textContent = tr.adminLogin;
+  const loginMute = $('#loginForm .mute');
+  if (loginMute) loginMute.textContent = tr.tokenHint;
+  const pw = $('#pw');
+  if (pw) pw.placeholder = tr.tokenPh;
+  const keepLabel = $('#loginForm .check');
+  if (keepLabel) {
+    const cb = keepLabel.querySelector('input');
+    keepLabel.replaceChildren(cb, document.createTextNode(' ' + tr.keepLogin));
+  }
+  const loginBtn = $('#loginForm button[type=submit]');
+  if (loginBtn) loginBtn.textContent = tr.login;
+  const upH2 = $('#uploadForm h2');
+  if (upH2) upH2.textContent = tr.newPack;
+  const upMute = $('#uploadForm .mute');
+  if (upMute) upMute.textContent = tr.uploadHint;
+  const nameIn = $('#uploadForm input[name=name]');
+  if (nameIn) nameIn.placeholder = tr.namePh;
+  const mcIn = $('#uploadForm input[name=mc]');
+  if (mcIn) mcIn.placeholder = tr.mcPh;
+  const descIn = $('#uploadForm textarea[name=desc]');
+  if (descIn) descIn.placeholder = tr.descPh;
+  const tipEls = $('#uploadForm').querySelectorAll('.mute');
+  if (tipEls[1]) tipEls[1].textContent = tr.tipCat;
+  const labels = $('#uploadForm').querySelectorAll('label:not(.check)');
+  if (labels[0]) {
+    const inp = labels[0].querySelector('input');
+    labels[0].replaceChildren(document.createTextNode(tr.zipLabel + ' '), inp);
+  }
+  if (labels[1]) {
+    const inp = labels[1].querySelector('input');
+    labels[1].replaceChildren(document.createTextNode(tr.imgLabel + ' '), inp);
+  }
+  const upBtn = $('#upBtn');
+  if (upBtn) upBtn.textContent = tr.upload;
+  const logoutBtn = $('#logout');
+  if (logoutBtn) logoutBtn.textContent = tr.logout;
+  document.querySelectorAll('.close').forEach(b => b.setAttribute('aria-label', tr.close));
+  renderLangs();
+  renderPacks();
+}
+
+function renderLangs() {
+  const box = $('#langs');
+  if (!box) return;
+  box.replaceChildren(...LANGS.map(l => h('button', {
+    type: 'button', class: 'lang', 'aria-pressed': String(lang === l.id),
+    onclick: () => {
+      lang = l.id;
+      localStorage.setItem(LANG_KEY, lang);
+      applyLang();
+    }
+  }, h('span', { class: 'flag' }, l.flag), h('span', {}, l.name))));
+}
+
+const api = (path, opts = {}) => fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo + path, {
+  cache: 'no-store',
+  ...opts,
+  headers: {
+    Accept: 'application/vnd.github+json',
+    Authorization: 'Bearer ' + getToken(),
+    ...(opts.body ? { 'Content-Type': 'application/json' } : {})
+  }
+});
+
+async function ghErr(r) {
+  let m = '';
+  try { m = (await r.json()).message || ''; } catch (_) {}
+  const text =
+    r.status === 401 ? 'Token ungültig oder abgelaufen. Bitte neu anmelden.' :
+    r.status === 403 || r.status === 404 ? 'Keine Schreibrechte. Hat der Token „Contents: Read and write“ für dieses Repo?' :
+    r.status === 409 || r.status === 422 ? 'Konflikt beim Speichern. Bitte noch einmal versuchen.' :
+    'GitHub-Fehler ' + r.status + (m ? ': ' + m : '');
+  return new Error(text);
+}
+
+const bytesToB64 = bytes => {
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+};
+
+async function ghReadList() {
+  const r = await api('/contents/packs.json');
+  if (r.status === 404) return { list: [], sha: null };
+  if (!r.ok) throw await ghErr(r);
+  const j = await r.json();
+  const bin = atob(String(j.content || '').replace(/\n/g, ''));
+  const txt = new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+  let data = [];
+  try { data = JSON.parse(txt); } catch (_) {}
+  return { list: Array.isArray(data) ? data : [], sha: j.sha };
+}
+
+async function ghWriteList(list, sha, message) {
+  const content = bytesToB64(new TextEncoder().encode(JSON.stringify(list, null, 2)));
+  const r = await api('/contents/packs.json', { method: 'PUT', body: JSON.stringify({ message, content, ...(sha ? { sha } : {}) }) });
+  if (!r.ok) throw await ghErr(r);
+}
+
+async function ghPutFile(path, contentB64, message) {
+  const r = await api('/contents/' + path, { method: 'PUT', body: JSON.stringify({ message, content: contentB64 }) });
+  if (!r.ok) throw await ghErr(r);
+}
+
+async function ghDeletePack(p) {
+  const { list, sha } = await ghReadList();
+  await ghWriteList(list.filter(x => x.id !== p.id), sha, 'Pack entfernen: ' + p.name);
+  try { // Dateien aufräumen (nicht kritisch)
+    const r = await api('/contents/packs');
+    if (r.ok) {
+      for (const f of await r.json()) {
+        if (f.name.startsWith(p.id + '.')) {
+          await api('/contents/packs/' + encodeURIComponent(f.name), { method: 'DELETE', body: JSON.stringify({ message: 'Datei entfernen: ' + f.name, sha: f.sha }) });
+        }
+      }
+    }
+  } catch (_) {}
+}
+
+function setAdminUI() {
+  document.body.classList.toggle('admin', isAdmin);
+  const b = $('#adminBadge');
+  if (b) b.hidden = !isAdmin;
+}
+
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => reject(new Error('Datei konnte nicht gelesen werden.'));
+    r.readAsDataURL(file);
+  });
+}
+
+async function fetchPacks() {
+  // Vorschau der Seiten: Adresse + ?demo (oder ?demo=40) zeigt Demo-Packs
+  const demo = new URLSearchParams(location.search).get('demo');
+  if (demo !== null) {
+    const n = Math.min(Math.max(parseInt(demo, 10) || 65, 1), 200);
+    return Array.from({ length: n }, (_, i) => ({
+      id: 'demo' + i, name: 'Demo-Pack ' + (n - i),
+      mc: ['1.21.4', '1.21', '1.20.4', '1.20.1', '1.19.4', '1.18.2', '1.16.5', '1.12.2', '1.8.9'][i % 9],
+      versions: (() => {
+        const base = ['1.21.4', '1.21', '1.20.4', '1.20.1', '1.19.4', '1.18.2', '1.16.5', '1.12.2', '1.8.9'];
+        // each demo pack supports a few neighboring versions
+        const start = i % base.length;
+        return [0, 1, 2].map(o => ({
+          mc: base[(start + o) % base.length],
+          zip: '', size: (o + 1) * 500000, date: Date.now() - o * 86400000
+        }));
+      })(),
+      desc: 'Nur zur Vorschau der Seiten. PvP Building Survival FPS Bedwars'.split(' ')[i % 5],
+      size: 500000, date: n - i, zip: '', image: ''
+    }));
+  }
+  if (isAdmin && GH.owner && GH.repo) {
+    try { return (await ghReadList()).list; } catch (_) {}
+  }
+  try {
+    const r = await fetch('packs.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const data = await r.json();
+      if (Array.isArray(data)) return data;
+    }
+  } catch (_) {}
+  return null;
+}
+
+const PAGE_SIZE = 30;
+let page = 1;
+let query = '';
+let cat = '';
+let ver = ''; // selected Minecraft version filter
+
+// Vollständige Minecraft-Versionsliste (Seitenleiste + Pack-Dialog identisch)
+const MC_VERSIONS = [
+  '1.21.4', '1.21.3', '1.21.2', '1.21.1', '1.21',
+  '1.20.6', '1.20.5', '1.20.4', '1.20.3', '1.20.2', '1.20.1', '1.20',
+  '1.19.4', '1.19.3', '1.19.2', '1.19.1', '1.19',
+  '1.18.2', '1.18.1', '1.18',
+  '1.17.1', '1.17',
+  '1.16.5', '1.16.4', '1.16.3', '1.16.2', '1.16.1', '1.16',
+  '1.15.2', '1.15.1', '1.15',
+  '1.14.4', '1.14.3', '1.14.2', '1.14.1', '1.14',
+  '1.13.2', '1.13.1', '1.13',
+  '1.12.2', '1.12.1', '1.12',
+  '1.11.2', '1.11.1', '1.11',
+  '1.10.2', '1.10.1', '1.10',
+  '1.9.4', '1.9.2', '1.9',
+  '1.8.9', '1.8.8', '1.8',
+  '1.7.10', '1.7.2',
+  '1.6.4', '1.5.2', '1.4.7'
+];
+
+// Pack-Versionen: unterstützt p.versions[] oder altes p.mc + p.zip
+function getPackVersions(p) {
+  if (Array.isArray(p.versions) && p.versions.length) {
+    return p.versions.map(v => ({
+      mc: String(v.mc || '').trim(),
+      zip: v.zip || '',
+      size: v.size || 0,
+      date: v.date || p.date || 0
+    })).filter(v => v.mc);
+  }
+  if (p.mc || p.zip) {
+    return [{ mc: String(p.mc || '').trim(), zip: p.zip || '', size: p.size || 0, date: p.date || 0 }];
+  }
+  return [];
+}
+
+function packHasVersion(p, v) {
+  if (!v) return true;
+  const vl = v.toLowerCase();
+  return getPackVersions(p).some(pv => {
+    const pmc = pv.mc.toLowerCase();
+    return pmc === vl || pmc.startsWith(vl + '.') || vl.startsWith(pmc + '.');
+  });
+}
+
+// Kategorien: ein Pack gehört dazu, wenn eines der Wörter im Namen oder in der Beschreibung steht
+const CATS = [
+  ['pvp', 'PvP', 'pvp'],
+  ['building', 'Building', 'building|bauen|build(?![a-z])|bau(?![a-z])'],
+  ['fps', 'FPS Boost', 'fps|performance|lag(?![a-z])|boost'],
+  ['bedwars', 'Bedwars', 'bed ?wars?'],
+  ['survival', 'Survival', 'survival']
+].map(([id, label, src]) => ({ id, label, re: new RegExp('(?:^|[^a-z0-9])(?:' + src + ')') }));
+const inCat = (p, c) => c.re.test(norm((p.name || '') + ' ' + (p.desc || '')));
+const norm = t => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+// Seitenzahlen mit Lücken: 1 … 4 5 6 … 12
+const pageItems = (cur, pages) => {
+  const nums = [...new Set([1, pages, cur - 1, cur, cur + 1])].filter(n => n >= 1 && n <= pages).sort((a, b) => a - b);
+  const out = [];
+  nums.forEach((n, i) => {
+    if (i) {
+      const gap = n - nums[i - 1];
+      if (gap === 2) out.push(n - 1);
+      else if (gap > 2) out.push('…');
+    }
+    out.push(n);
+  });
+  return out;
+};
+
+function renderPager(pages, count) {
+  const pager = $('#pager');
+  const tr = t();
+  pager.replaceChildren();
+  const go = n => () => {
+    page = n;
+    renderPacks();
+    $('#packs h2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  const btn = (label, n, o = {}) => h('button', {
+    type: 'button', onclick: go(n), disabled: !!o.disabled,
+    'aria-label': o.aria, 'aria-current': o.current ? 'page' : false
+  }, label);
+  pager.append(btn('‹', page - 1, { disabled: page === 1, aria: tr.prevPage }));
+  for (const it of pageItems(page, pages)) {
+    pager.append(it === '…'
+      ? h('span', { class: 'gap', 'aria-hidden': 'true' }, '…')
+      : btn(String(it), it, { current: it === page, aria: tr.pageN(it) }));
+  }
+  pager.append(btn('›', page + 1, { disabled: page === pages, aria: tr.nextPage }));
+  $('#pageInfo').textContent = tr.pageInfo(page, pages, count);
+}
+
+function packMatchesVer(p, v) {
+  return packHasVersion(p, v);
+}
+
+function renderCats() {
+  const box = $('#cats');
+  const tr = t();
+  const item = (id, label, n) => h('button', {
+    type: 'button', class: 'cat' + (n === 0 ? ' zero' : ''), 'aria-pressed': String(cat === id),
+    onclick: () => { cat = cat === id ? '' : id; page = 1; renderPacks(); }
+  }, h('span', {}, label), h('small', {}, String(n)));
+  const base = packs.filter(p => packMatchesVer(p, ver));
+  box.replaceChildren(
+    item('', tr.allPacks, base.length),
+    ...CATS.map(c => item(c.id, (tr.cats && tr.cats[c.id]) || c.label, base.filter(p => inCat(p, c)).length))
+  );
+}
+
+function renderVers() {
+  const box = $('#vers');
+  if (!box) return;
+  const tr = t();
+  // Nur Versionen, die wirklich bei Packs hochgeladen wurden – mit Anzahl wie bei Kategorien
+  const map = new Map();
+  for (const p of packs) {
+    for (const pv of getPackVersions(p)) {
+      const key = pv.mc;
+      if (!key) continue;
+      map.set(key, (map.get(key) || 0) + 1);
+    }
+  }
+  const versions = [...map.entries()].sort((a, b) => {
+    const pa = a[0].split('.').map(Number);
+    const pb = b[0].split('.').map(Number);
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+      const d = (pb[i] || 0) - (pa[i] || 0);
+      if (d) return d;
+    }
+    return 0;
+  });
+  // Wenn aktuelle Filter-Version nicht mehr existiert, zurücksetzen
+  if (ver && !map.has(ver)) ver = '';
+  const item = (id, label, n) => h('button', {
+    type: 'button', class: 'cat' + (n === 0 ? ' zero' : ''), 'aria-pressed': String(ver === id),
+    onclick: () => { ver = ver === id ? '' : id; page = 1; renderPacks(); }
+  }, h('span', {}, label), h('small', {}, String(n)));
+  box.replaceChildren(
+    item('', tr.allVersions || 'All versions', packs.length),
+    ...versions.map(([v, n]) => item(v, v, n))
+  );
+}
+
+function renderPacks() {
+  const grid = $('#grid');
+  const tr = t();
+  const q = norm(query).trim();
+  const active = CATS.find(c => c.id === cat);
+  const list = packs.filter(p =>
+    (!q || norm(p.name).includes(q)) &&
+    (!active || inCat(p, active)) &&
+    packMatchesVer(p, ver)
+  );
+  renderCats();
+  renderVers();
+  if (!list.length) {
+    const catLabel = active ? ((tr.cats && tr.cats[active.id]) || active.label) : '';
+    const extra = ver ? (catLabel ? ` · ${ver}` : ver) : catLabel;
+    grid.replaceChildren(h('p', { class: 'empty' }, packs.length
+      ? tr.noneFound(extra, q ? query.trim() : '')
+      : tr.noPacks));
+    renderPager(1, 0);
+    return;
+  }
+  const pages = Math.ceil(list.length / PAGE_SIZE);
+  page = Math.min(Math.max(page, 1), pages);
+  grid.replaceChildren(...list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map(card));
+  renderPager(pages, list.length);
+}
+// Suche: zeigt nur Packs, deren Name den Suchbegriff enthält
+$('#search').addEventListener('input', e => {
+  query = e.target.value;
+  page = 1;
+  renderPacks();
+});
+$('#search').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+
+async function load() {
+  const got = await fetchPacks();
+  if (got) packs = got;
+  renderPacks();
+}
+
+const card = p => {
+  const pvers = getPackVersions(p);
+  const tag = pvers.length
+    ? (pvers.length === 1 ? 'Minecraft ' + pvers[0].mc : 'Minecraft ' + pvers[0].mc + (pvers.length > 1 ? ' +' + (pvers.length - 1) : ''))
+    : null;
+  return h('article', { class: 'card' },
+    h('button', { class: 'open', type: 'button', onclick: () => openPack(p.id) },
+      p.image
+        ? h('img', { src: p.image, alt: p.name, loading: 'lazy' })
+        : h('div', { class: 'ph' }, (p.name || '?')[0].toUpperCase()),
+      h('div', { class: 'meta' },
+        h('h3', {}, p.name || 'Ohne Namen'),
+        tag ? h('span', { class: 'tag' }, tag) : null
+      )
+    )
+  );
+};
+
+function fmtSize(bytes) {
+  if (!bytes) return '';
+  const n = (bytes / 1048576).toFixed(1);
+  const dec = ['de', 'fr', 'it', 'es', 'pt', 'nl', 'pl', 'cs', 'sk', 'hr', 'hu', 'ro'].includes(lang) ? ',' : '.';
+  return n.replace('.', dec) + ' MB';
+}
+
+function openPack(id) {
+  const p = packs.find(x => x.id === id);
+  if (!p) return;
+  const tr = t();
+  const locale = lang === 'de' ? 'de-DE' : lang === 'en' ? 'en-US' : lang;
+  const pvers = getPackVersions(p);
+  // Nur die Versionen, die für dieses Pack hochgeladen wurden
+  let selected = (ver && pvers.some(x => x.mc === ver)) ? ver
+    : (pvers[0] && pvers[0].mc) || '';
+
+  const kids = [];
+  if (p.image) kids.push(h('img', { src: p.image, alt: p.name }));
+  kids.push(h('h2', {}, p.name || 'Pack'));
+  if (p.desc) kids.push(h('p', {}, p.desc));
+
+  const metaEl = h('p', { class: 'mute' }, '');
+  const dlWrap = h('div', {});
+
+  const refreshDl = () => {
+    const file = pvers.find(x => x.mc === selected) || pvers[0] || null;
+    const sizeMb = file ? fmtSize(file.size) : '';
+    const dateStr = file && file.date ? new Date(file.date).toLocaleDateString(locale) : '';
+    metaEl.textContent = [selected && ('Minecraft ' + selected), sizeMb, dateStr].filter(Boolean).join(' · ') || ' ';
+    dlWrap.replaceChildren();
+    if (file && file.zip) {
+      dlWrap.append(h('a', {
+        class: 'btn', href: file.zip,
+        download: (p.name || 'pack') + (selected ? '-' + selected : '') + '.zip'
+      }, tr.download + (selected ? ' · ' + selected : '')));
+    } else {
+      dlWrap.append(h('p', { class: 'mute' }, tr.noDownload));
+    }
+  };
+
+  if (pvers.length > 0) {
+    kids.push(h('p', { class: 'verlabel' }, tr.verLabel || 'Versions'));
+    const verBox = h('div', { class: 'vergrid' });
+    pvers.forEach(pv => {
+      verBox.append(h('button', {
+        type: 'button',
+        class: 'verchip avail',
+        'aria-pressed': String(selected === pv.mc),
+        onclick: () => {
+          selected = pv.mc;
+          verBox.querySelectorAll('.verchip').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === pv.mc)));
+          refreshDl();
+        }
+      }, pv.mc));
+    });
+    kids.push(verBox);
+  }
+  kids.push(metaEl);
+  kids.push(dlWrap);
+  refreshDl();
+
+  if (isAdmin) {
+    kids.push(h('button', {
+      class: 'x', type: 'button',
+      onclick: async ev => {
+        if (!confirm(tr.confirmDel(p.name))) return;
+        const btn = ev.currentTarget;
+        btn.disabled = true;
+        btn.textContent = tr.deleting;
+        try {
+          await ghDeletePack(p);
+          packs = packs.filter(x => x.id !== id);
+          $('#packDlg').close();
+          load();
+        } catch (err) {
+          btn.disabled = false;
+          btn.textContent = tr.deletePack;
+          alert(err.message || 'Error');
+        }
+      }
+    }, tr.deletePack));
+  }
+
+  $('#packBody').replaceChildren(...kids);
+  if (!$('#packDlg').open) $('#packDlg').showModal();
+}
+const openAdmin = () => {
+  $('#loginMsg').textContent = '';
+  $('#upMsg').textContent = '';
+  if (!$('#adminDlg').open) $('#adminDlg').showModal();
+  if (!isAdmin) $('#pw').focus();
+};
+// Versteckter Zugang: 5x schnell auf den dritten gelben Stern tippen
+(() => {
+  let taps = 0, timer;
+  $('#adminStar').addEventListener('click', () => {
+    clearTimeout(timer);
+    if (++taps >= 5) { taps = 0; openAdmin(); return; }
+    timer = setTimeout(() => { taps = 0; }, 1500);
+  });
+})();
+$('#logout').onclick = () => {
+  isAdmin = false;
+  sessionStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_KEY);
+  setAdminUI();
+  $('#adminDlg').close();
+};
+$('#loginForm').onsubmit = async e => {
+  e.preventDefault();
+  const msg = $('#loginMsg');
+  const btn = e.target.querySelector('button[type=submit]');
+  msg.classList.remove('err');
+  msg.textContent = 'Prüfe …';
+  btn.disabled = true;
+  try {
+    const token = ($('#pw').value || '').trim();
+    if (!token) throw new Error('Bitte Token eingeben.');
+    if (!/^(github_pat_|gh[pousr]_)/.test(token)) throw new Error('Das ist kein GitHub-Token (er beginnt mit github_pat_). Erstelle einen auf github.com unter Settings → Developer settings → Fine-grained tokens.');
+    if (!GH.owner || !GH.repo) throw new Error('Repository nicht erkannt. Trage GH_OWNER und GH_REPO in index.html ein.');
+    const r = await fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo, {
+      cache: 'no-store',
+      headers: { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + token }
+    });
+    if (r.status === 401) throw new Error('Token ungültig.');
+    if (!r.ok) throw new Error('Kein Zugriff auf das Repository.');
+    const info = await r.json();
+    if (info.permissions && info.permissions.push === false) throw new Error('Token hat kein Schreibrecht für dieses Repository.');
+    (($('#keep').checked) ? localStorage : sessionStorage).setItem(TOKEN_KEY, token);
+    isAdmin = true;
+    $('#pw').value = '';
+    msg.textContent = '';
+    setAdminUI();
+    load();
+  } catch (err) {
+    msg.classList.add('err');
+    msg.textContent = err.message || 'Anmeldung fehlgeschlagen.';
+  } finally {
+    btn.disabled = false;
+  }
+};
+$('#uploadForm').onsubmit = async e => {
+  e.preventDefault();
+  if (!isAdmin) return;
+  const form = e.target;
+  const msg = $('#upMsg');
+  const btn = $('#upBtn');
+  msg.classList.remove('err');
+  msg.textContent = 'Prüfe …';
+  btn.disabled = true;
+  try {
+    const fd = new FormData(form);
+    const name = String(fd.get('name') || '').trim();
+    const mc = String(fd.get('mc') || '').trim();
+    const desc = String(fd.get('desc') || '').trim();
+    const zip = fd.get('zip');
+    const img = fd.get('image');
+    if (!name) throw new Error('Name fehlt.');
+    if (!zip || !zip.size) throw new Error('ZIP fehlt.');
+    if (zip.size > 15 * 1048576) throw new Error('ZIP max. 15 MB.');
+    if (img && img.size > 3 * 1048576) throw new Error('Bild max. 3 MB.');
+    if (!GH.owner || !GH.repo) throw new Error('Repository nicht erkannt. Trage GH_OWNER und GH_REPO in index.html ein.');
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const toB64 = async f => { const u = await fileToDataUrl(f); return u.slice(u.indexOf(',') + 1); };
+    msg.textContent = 'Lade ZIP hoch … (bei großen Dateien dauert das etwas)';
+    await ghPutFile('packs/' + id + '.zip', await toB64(zip), 'Neues Pack: ' + name);
+    let image = '';
+    if (img && img.size) {
+      const ext = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[img.type] || 'png';
+      msg.textContent = 'Lade Vorschaubild hoch …';
+      await ghPutFile('packs/' + id + '.' + ext, await toB64(img), 'Vorschaubild: ' + name);
+      image = 'packs/' + id + '.' + ext;
+    }
+    msg.textContent = 'Speichere Liste …';
+    const { list, sha } = await ghReadList();
+    const zipPath = 'packs/' + id + '.zip';
+    const pack = {
+      id, name, mc, desc, size: zip.size, date: Date.now(), zip: zipPath, image,
+      versions: mc ? [{ mc, zip: zipPath, size: zip.size, date: Date.now() }] : []
+    };
+    await ghWriteList([pack, ...list], sha, 'Pack hinzufügen: ' + name);
+    form.reset();
+    msg.textContent = 'Fertig – in ca. 1–2 Minuten für alle sichtbar.';
+    page = 1;
+    await load();
+  } catch (err) {
+    msg.classList.add('err');
+    msg.textContent = err.message || 'Fehler beim Hochladen.';
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+document.addEventListener('click', e => {
+  if (e.target.matches('.close')) e.target.closest('dialog')?.close();
+  else if (e.target === $('#packDlg') || e.target === $('#adminDlg')) e.target.close();
+});
+
+setAdminUI();
+applyLang();
+load();
+
+(() => {
+  const c = $('#sky'), x = c.getContext('2d'), R = Math.random;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 0, H = 0, S = [], F = [];
+  const size = () => {
+    W = c.width = innerWidth; H = c.height = innerHeight;
+    S = Array.from({ length: Math.min(160, (W * H) / 9000 | 0) }, () => ({
+      x: R() * W, y: R() * H, r: R() * 1.3 + .3, p: R() * 6.28, s: R() * .02 + .005
+    }));
+  };
+  const draw = () => {
+    x.clearRect(0, 0, W, H);
+    for (const s of S) {
+      x.globalAlpha = calm ? .7 : .3 + .7 * Math.abs(Math.sin(s.p += s.s));
+      x.fillStyle = s.r > 1.2 ? '#ffe8a3' : '#e9d5ff';
+      x.beginPath(); x.arc(s.x, s.y, s.r, 0, 6.28); x.fill();
+    }
+    if (!calm) {
+      if (R() < .012 && F.length < 3) F.push({ x: R() * W * 1.2, y: -20, v: 3 + R() * 3 });
+      for (let i = F.length; i--;) {
+        const f = F[i];
+        f.x -= f.v * .45; f.y += f.v;
+        const tx = f.x + f.v * .45 * 14, ty = f.y - f.v * 14;
+        const g = x.createLinearGradient(f.x, f.y, tx, ty);
+        g.addColorStop(0, 'rgba(255,240,200,.9)');
+        g.addColorStop(1, 'rgba(192,132,252,0)');
+        x.globalAlpha = 1; x.strokeStyle = g; x.lineWidth = 1.6;
+        x.beginPath(); x.moveTo(f.x, f.y); x.lineTo(tx, ty); x.stroke();
+        if (f.y > H + 80 || f.x < -80) F.splice(i, 1);
+      }
+      requestAnimationFrame(draw);
+    }
+  };
+  size(); draw();
+  addEventListener('resize', () => { if (innerWidth !== W) { size(); if (calm) draw(); } });
+})();
+
+// Online-Player-Anzeige: alle 2 Sekunden eine neue Zufallszahl von 4.000 bis 10.000
+(() => {
+  const el = $('#onlineNum');
+  if (!el) return;
+  const tick = () => { el.textContent = (4000 + Math.floor(Math.random() * 6001)).toLocaleString('de-DE'); };
+  tick();
+  setInterval(tick, 2000);
+})();
+
+// Laser (nur am PC): alle 4 Sekunden fällt links und rechts ein lila-schwarzer Strahl nach unten
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const pc = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 900px)');
+  setInterval(() => {
+    if (document.hidden || reduce.matches || !pc.matches) return;
+    for (const side of ['l', 'r']) {
+      const el = document.createElement('div');
+      el.className = 'laser ' + side;
+      el.addEventListener('animationend', () => el.remove());
+      document.body.append(el);
+    }
+  }, 4000);
+})();
+</script>
+</body>
+</html>
